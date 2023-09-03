@@ -1,0 +1,44 @@
+{
+	"monsters": [
+		{
+			"monsterType": "General",
+			"monsterName": ""
+		},
+		{
+			"monsterType": "General",
+			"monsterName": ""
+		},
+		{
+			"monsterType": "General",
+			"monsterName": ""
+		},
+		{
+			"monsterType": "General",
+			"monsterName": ""
+		},
+		{
+			"monsterType": "General",
+			"monsterName": ""
+		},
+		{
+			"monsterType": "General",
+			"monsterName": ""
+		},
+		{
+			"monsterType": "General",
+			"monsterName": ""
+		},
+		{
+			"monsterType": "General",
+			"monsterName": ""
+		},
+		{
+			"monsterType": "Attack",
+			"monsterName": ""
+		},
+		{
+			"monsterType": "Boss",
+			"monsterName": ""
+		}
+	]
+}
