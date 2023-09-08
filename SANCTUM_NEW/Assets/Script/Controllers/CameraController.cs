@@ -20,6 +20,9 @@ public class CameraController : MonoBehaviour
     public Transform parentBody;
     float xRotation = 0f;
 
+    Camera _towerCamera;
+    Turret _towerData;
+
     void Start()
     {
 
@@ -27,6 +30,17 @@ public class CameraController : MonoBehaviour
 
     void LateUpdate()
     {
+        if (GameManager.GameIsOver)
+        {
+            this.enabled = false;
+            return;
+        }
+
+        if (!GameManager.instance.isLive)
+        {
+            return;
+        }
+
         if (_mode == Define.CameraMode.QuarterView)
         {
             /*RaycastHit hit;
@@ -41,16 +55,6 @@ public class CameraController : MonoBehaviour
                 transform.LookAt(_player.transform);
             }*/
 
-            if (GameManager.GameIsOver)
-            {
-                this.enabled = false;
-                return;
-            }
-
-            if (!GameManager.instance.isLive)
-            {
-                return;
-            }
 
             // 마우스 왼쪽 버튼을 누르는 순간 드래그 시작 위치를 저장합니다.
             if (Input.GetMouseButtonDown(1))
@@ -100,6 +104,13 @@ public class CameraController : MonoBehaviour
         }
         else
         {
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                // 코루틴을 다른 스크립트에서 쓸때도 StartCoroutine() 써줘야 함
+                GameManager.instance.StartCoroutine(GameManager.instance.WaitForItemSelection());
+                SetQuarterView();
+            }
+
             float mouseX = Input.GetAxis("Mouse X") * mouseSensitivitiy * Time.deltaTime;
             float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivitiy * Time.deltaTime;
 
@@ -111,15 +122,33 @@ public class CameraController : MonoBehaviour
         }
     }
 
-    public void SetQuarterView(Vector3 delta)
+    public void SetQuarterView()   // Vector3 delta
     {
         _mode = Define.CameraMode.QuarterView;
+
+        /*GameManager.instance.isFPM = false;
+        _towerData.isFPM = false;
+        _towerCamera.enabled = false;
+        GameManager.instance.MainCamera.SetActive(true);
+        Cursor.lockState = CursorLockMode.None;*/
+
         //_delta = delta;
     }
 
-    public void SetFirstPersonView(Vector3 delta)
+    public void SetFirstPersonView()  // Vector3 delta
     {
         _mode = Define.CameraMode.FirstPersonView;
+
+        /*GameManager.instance.isFPM = true;
+        GameManager.instance.MainCamera.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;*/
+
         //_delta = delta;
+    }
+
+    public void GetTower(GameObject tower)
+    {
+        _towerCamera = tower.GetComponentInChildren<Camera>();
+        _towerData = tower.GetComponent<Turret>();
     }
 }

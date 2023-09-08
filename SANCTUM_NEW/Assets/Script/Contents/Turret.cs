@@ -131,6 +131,11 @@ public class Turret : MonoBehaviour
 
         if (isFPM)
         {
+            if (Input.GetMouseButtonDown(0))  // 마우스 좌클릭을 감지
+            {
+                //FireBullet();
+            }
+
             return;
         }
 
@@ -269,6 +274,27 @@ public class Turret : MonoBehaviour
         {
             bullet.Seek(target);
         }
+    }
+
+    void FireBullet()
+    {
+        Managers.Sound.Play("Effects/Arrow", Define.Sound.Effect);
+        //GameManager.instance.soundManager.Play("Effects/Arrow", SoundManager.Sound.Effect);
+        GameObject bulletGO = Managers.Resource.Instantiate("Tower/Prefab/Bullet/StandardBullet");
+        bulletGO.transform.SetPositionAndRotation(transform.position, transform.rotation);
+        //GameObject bulletGO = GameManager.instance.pool.GetBullet(turretData.bulletIndex, transform.position, transform.rotation);  // 총알 생성
+        bulletGO.transform.GetChild(0).gameObject.SetActive(false);
+        Bullet bullet = bulletGO.GetComponent<Bullet>();
+        bullet.isFPM = true;
+        bullet.damage = bulletDamage * 1.5f;
+        float bulletForce = bulletSpeed * 1.5f;
+
+        bullet.firePoint = transform.position;
+        bullet.range = range;
+
+        Rigidbody bulletRigidbody = bullet.GetComponent<Rigidbody>();
+        // 총알에 힘을 가해 발사
+        bulletRigidbody.velocity = transform.forward * bulletForce;
     }
 
     void FindTowersInRadius()
