@@ -29,9 +29,9 @@
 		},
 		{
 			"itemType": "Element",
-			"itemName": "Lighting",
-			"itemIcon": "LightingIcon",
-			"bulletType": "LightingBullet",
+			"itemName": "Lightning",
+			"itemIcon": "LightningIcon",
+			"bulletType": "LightningBullet",
 			"returnExp": 1
 		},
 		{

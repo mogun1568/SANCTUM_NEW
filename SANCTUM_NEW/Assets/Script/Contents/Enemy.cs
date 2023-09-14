@@ -124,7 +124,7 @@ public class Enemy : MonoBehaviour
 
     public void AttackTower()
     {
-        target.GetComponent<Turret>().TakeDamage(monster.damage);
+        //target.GetComponent<Turret>().TakeDamage(monster.damage);
         gunParticle.Play();
     }
 

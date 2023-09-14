@@ -7,7 +7,7 @@ using TMPro;
 
 public class Turret : MonoBehaviour
 {
-    private Transform target;
+    /*private Transform target;
     //private Enemy targetEnemy;
 
     [HideInInspector] public Data.Item itemData;
@@ -336,5 +336,5 @@ public class Turret : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, range);
-    }
+    }*/
 }

@@ -118,7 +118,8 @@ public class WaveSpawner : MonoBehaviour
     void SpawnEnemy()
     {
         // 몬스터 원점이 발임
-        GameObject monster = Managers.Resource.Instantiate("Monster/AlienDefault");
+        GameObject[] monsters = Resources.LoadAll<GameObject>("Prefabs/Monster");
+        GameObject monster = Managers.Resource.Instantiate($"Monster/{monsters[Random.Range(0, monsters.Length)].name}");
         monster.transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
         //GameManager.instance.pool.GetMonster(Random.Range(0, monsterType - 1), spawnPoint.position, spawnPoint.rotation); //  * Quaternion.Euler(0f, 180f, 0f)
         //Instantiate(enemy, spawnPoint.position - Vector3.up * 1.5f, spawnPoint.rotation);

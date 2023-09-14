@@ -124,12 +124,12 @@ public class Node : MonoBehaviour
         upgradedNum++;
 
         // 원소 타워 생성
-        GameObject _turret = Managers.Resource.Instantiate("Tower/Prefab/BallistaTowerlvl02");
+        GameObject _turret = Managers.Resource.Instantiate($"Tower/Prefab/{itemData.itemName}Tower/{itemData.itemName}Towerlvl0{upgradedNum.ToString()}");
         _turret.transform.SetPositionAndRotation(GetBuildPosition(), Quaternion.identity);
         //GameObject _turret = GameManager.instance.pool.GetTower(data.itemId, upgradedNum - 1, GetBuildPosition(), Quaternion.identity);
 
         // 타워 정보 이동
-        Turret turretComponent = turret.GetComponent<Turret>();
+        /*Turret turretComponent = turret.GetComponent<Turret>();
         Turret _turretComponent = _turret.GetComponent<Turret>();
 
         _turretComponent.range = turretComponent.range;
@@ -138,22 +138,30 @@ public class Node : MonoBehaviour
         _turretComponent.bulletDamage = turretComponent.bulletDamage;
         _turretComponent.health = turretComponent.health;
 
-        _turretComponent.health += 50;
-        //_turretComponent.bulletDamage *= data.damage;
-        //_turretComponent.range *= data.range;
-        //_turretComponent.fireRate *= data.fireRate;
+        _turretComponent.health += 50;*/
+
+        TowerStat curTowerStat = turret.GetComponent<TowerControl>()._stat;
+        TowerStat newTowerStat = _turret.GetComponent<TowerControl>()._stat;
+
+        newTowerStat.TowerType = element;
+        newTowerStat.HP = curTowerStat.HP;
+        newTowerStat.Range = curTowerStat.Range;
+        newTowerStat.FireRate = curTowerStat.FireRate;
+        newTowerStat.BulletDamage = curTowerStat.BulletDamage;
+        newTowerStat.BulletSpeed = curTowerStat.BulletSpeed;
 
         // 타워 변경
         Managers.Resource.Destroy(turret);
         //turret.SetActive(false);
         turret = _turret;
 
-        turret.GetComponent<Turret>().itemData = itemData;
+        //turret.GetComponent<Turret>().itemData = itemData;
+        turret.GetComponent<TowerControl>().itemData = itemData;
 
         if (element == "Water")
         {
             Transform healEffect = turret.transform.GetChild(turret.transform.childCount - 1);
-            healEffect.localScale = new Vector3(_turretComponent.range * 2, healEffect.localScale.y, _turretComponent.range * 2);
+            healEffect.localScale = new Vector3(newTowerStat.Range * 2, healEffect.localScale.y, newTowerStat.Range * 2);
         }
 
         BulldEffect();
@@ -169,27 +177,28 @@ public class Node : MonoBehaviour
     {
         Managers.Sound.Play("Effects/Soundiron_Shimmer_Charms_Short_07 [2023-06-13 121009]", Define.Sound.Effect);
         //GameManager.instance.soundManager.Play("Effects/Soundiron_Shimmer_Charms_Short_07 [2023-06-13 121009]", SoundManager.Sound.Effect);
-        Turret turretScript = turret.GetComponent<Turret>();
+        //Turret turretScript = turret.GetComponent<Turret>();
+        TowerStat towerStat = turret.GetComponent<TowerControl>()._stat;
 
         switch (itemData.itemName)
         {
             case "DamageUp":
-                Debug.Log($"Damage Up {turretScript.bulletDamage} -> {turretScript.bulletDamage * itemData.upgradeAmount}");
-                turretScript.bulletDamage *= itemData.upgradeAmount;
+                Debug.Log($"Damage Up {towerStat.BulletDamage} -> {towerStat.BulletDamage * itemData.upgradeAmount}");
+                towerStat.BulletDamage *= itemData.upgradeAmount;
                 break;
             case "RangeUp":
-                Debug.Log($"Range Up {turretScript.range} -> {turretScript.range * itemData.upgradeAmount}");
-                turretScript.range *= itemData.upgradeAmount;
+                Debug.Log($"Range Up {towerStat.Range} -> {towerStat.Range * itemData.upgradeAmount}");
+                towerStat.Range *= itemData.upgradeAmount;
 
                 if (element == "Water")
                 {
                     Transform healEffect = turret.transform.GetChild(turret.transform.childCount - 1);
-                    healEffect.localScale = new Vector3(turretScript.range * 2, healEffect.localScale.y, turretScript.range * 2);
+                    healEffect.localScale = new Vector3(towerStat.Range * 2, healEffect.localScale.y, towerStat.Range * 2);
                 }
                 break;
             case "FireRateUp":
-                Debug.Log($"Range Up {turretScript.fireRate} -> {turretScript.fireRate * itemData.upgradeAmount}");
-                turretScript.fireRate *= itemData.upgradeAmount;
+                Debug.Log($"Range Up {towerStat.FireRate} -> {towerStat.FireRate * itemData.upgradeAmount}");
+                towerStat.FireRate *= itemData.upgradeAmount;
                 break;
         }
         Managers.Select.itemUITextDecrease();
@@ -204,8 +213,9 @@ public class Node : MonoBehaviour
     public void FirstPersonMode()
     {
         Debug.Log("First Person Mode");
-        Turret turretScript = turret.GetComponent<Turret>();
-        turretScript.isFPM = true;
+        //Turret turretScript = turret.GetComponent<Turret>();
+        TowerControl towerControl = turret.GetComponent<TowerControl>();
+        towerControl.isFPM = true;
         // 비활성화된 오브젝트는 그냥 GetComponent로 못찾음 GetComponents<>(true)로 배열로 찾아서 사용해야 함
         turret.GetComponentsInChildren<Camera>(true)[0].gameObject.SetActive(true);
     }

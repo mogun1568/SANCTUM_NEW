@@ -9,7 +9,6 @@ public class Managers : MonoBehaviour
 
     DataManager _data = new DataManager();
     InputManager _input = new InputManager();
-    //InvenManager _inven = new InvenManager();
     PoolManager _pool = new PoolManager();
     ResourceManager _resource = new ResourceManager();
     SceneManagerEx _scene = new SceneManagerEx();
@@ -19,7 +18,6 @@ public class Managers : MonoBehaviour
 
     public static DataManager Data { get { return Instance._data; } }
     public static InputManager Input { get { return Instance._input; } }
-    //public static InvenManager Inven { get { return Instance._inven; } }
     public static PoolManager Pool { get { return Instance._pool; } }
     public static ResourceManager Resource { get { return Instance._resource; } }
     public static SceneManagerEx Scene { get { return Instance._scene; } }
@@ -56,7 +54,6 @@ public class Managers : MonoBehaviour
             s_instance._data.Init();
             s_instance._pool.Init();
             s_instance._sound.Init();
-            //s_instance._inven.Init();
         }
     }
 

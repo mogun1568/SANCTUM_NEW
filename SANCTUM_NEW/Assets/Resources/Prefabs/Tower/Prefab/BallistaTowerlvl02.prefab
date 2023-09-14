@@ -149,7 +149,7 @@ GameObject:
   - component: {fileID: 8699166899354828249}
   - component: {fileID: 8699166899355795225}
   m_Layer: 0
-  m_Name: BallistaBowlvl02
+  m_Name: PartToRotate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -400,8 +400,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8699166899354025471}
-  - component: {fileID: 2817018068762590625}
   - component: {fileID: 7786509790425237251}
+  - component: {fileID: 9096904943224682191}
   m_Layer: 0
   m_Name: BallistaTowerlvl02
   m_TagString: Tower
@@ -427,37 +427,6 @@ Transform:
   - {fileID: 8699166899354025469}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2817018068762590625
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8699166899353854431}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca862809ac5d3a449b627c81a3b0bc55, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemData:
-    itemType: 
-    itemName: 
-    itemIcon: 
-    bulletType: 
-    upgradeAmount: 0
-    returnExp: 0
-  range: 15
-  health: 0
-  fireRate: 1
-  bulletSpeed: 70
-  bulletDamage: 50
-  enemyTag: Enemy
-  towerTag: Tower
-  partToRotate: {fileID: 8699166899354025465}
-  turnSpeed: 10
-  firePoint: {fileID: 4253167733792877752}
-  isFPM: 0
-  isHealTower: 0
 --- !u!114 &7786509790425237251
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -471,3 +440,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsUsing: 0
+--- !u!114 &9096904943224682191
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8699166899353854431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 372ba95640510ee46a11d198a4ba4964, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stat: {fileID: 0}
+  itemData:
+    itemType: 
+    itemName: 
+    itemIcon: 
+    bulletType: 
+    upgradeAmount: 0
+    returnExp: 0
+  enemyTag: Enemy
+  towerTag: Tower
+  partToRotate: {fileID: 8699166899354025465}
+  turnSpeed: 10
+  firePoint: {fileID: 4253167733792877752}
+  isFPM: 0
+  isHealTower: 0

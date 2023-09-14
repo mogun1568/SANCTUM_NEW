@@ -22,7 +22,8 @@ public class NodeUI : MonoBehaviour
 
 
     private Node target;
-    private Turret tower;
+    //private Turret tower;
+    TowerControl towerControl;
     //public TextMeshProUGUI retrunExp; // 추가 예정
 
 
@@ -144,13 +145,14 @@ public class NodeUI : MonoBehaviour
 
         transform.position = target.GetBuildPosition();
 
-        tower = target.turret.GetComponent<Turret>();
+        //tower = target.turret.GetComponent<Turret>();
+        towerControl = target.turret.GetComponent<TowerControl>();
 
         //retrunExp.text = 경헙치 + "Exp"  // 추가 예정
 
         ui.SetActive(true);
         boundary.SetActive(true);
-        if (tower.itemData.itemName == "Water")
+        if (towerControl.itemData.itemName == "Water")
         {
             fPMButton.SetActive(false);
         }
@@ -163,15 +165,15 @@ public class NodeUI : MonoBehaviour
 
     void ChangeInfo()
     {
-        float curHP = tower.health;
+        float curHP = towerControl._stat.HP;
         float maxHP = 100f;
         hp.value = curHP / maxHP;
 
-        damage.text = tower.bulletDamage.ToString("F0");
-        fireRate.text = tower.fireRate.ToString("F1");
+        damage.text = towerControl._stat.BulletDamage.ToString("F0");
+        fireRate.text = towerControl._stat.FireRate.ToString("F1");
 
-        sphere.localScale = new Vector3(tower.range * 2, sphere.localScale.y, tower.range * 2);
-        sphere1.localScale = new Vector3(tower.range * 2 - 0.5f, sphere1.localScale.y, tower.range * 2 - 0.5f);
+        sphere.localScale = new Vector3(towerControl._stat.Range * 2, sphere.localScale.y, towerControl._stat.Range * 2);
+        sphere1.localScale = new Vector3(towerControl._stat.Range * 2 - 0.5f, sphere1.localScale.y, towerControl._stat.Range * 2 - 0.5f);
     }
 
 
@@ -186,7 +188,7 @@ public class NodeUI : MonoBehaviour
         target.FirstPersonMode();
         Managers.Select.DeselectNode();
         //BuildManager.instance.DeselectNode();
-        FPSUI.getTower(tower);
+        FPSUI.getTower(towerControl);
     }
 
     public void Demolite()

@@ -13,7 +13,8 @@ public class FPSUI : MonoBehaviour
     [SerializeField] Slider hpSlider;
     [SerializeField] TextMeshProUGUI hpText;
 
-    static Turret tower;
+    //static Turret tower;
+    static TowerControl towerControl;
 
     public Image icon;
 
@@ -36,12 +37,12 @@ public class FPSUI : MonoBehaviour
             fpsCanvas.SetActive(true);
             //fpsCanvas.enabled = true;
 
-            if (!tower)
+            /*if (!tower)
             {
                 Debug.Log("hi");
                 return;
-            }
-            icon.sprite = Managers.Resource.Load<Sprite>($"Icon/{tower.itemData.itemIcon}");
+            }*/
+            icon.sprite = Managers.Resource.Load<Sprite>($"Icon/{towerControl.itemData.itemIcon}");
         }
         else
         {
@@ -50,7 +51,7 @@ public class FPSUI : MonoBehaviour
             //fpsCanvas.enabled = false;
         }
 
-        if (tower)
+        if (towerControl)
         {
             ChangeInfo();
         }
@@ -58,15 +59,15 @@ public class FPSUI : MonoBehaviour
 
     void ChangeInfo()
     {
-        float curHP = tower.health;
-        float maxHP = 100f;
+        float curHP = towerControl._stat.HP;
+        float maxHP = towerControl._stat.MaxHp;
         hpSlider.value = curHP / maxHP;
 
-        hpText.text = tower.health.ToString("F0") + "/100";
+        hpText.text = towerControl._stat.HP.ToString("F0") + "/100";
     }
 
-    public static void getTower(Turret _tower)
+    public static void getTower(TowerControl _tower)
     {
-        tower = _tower;
+        towerControl = _tower;
     }
 }

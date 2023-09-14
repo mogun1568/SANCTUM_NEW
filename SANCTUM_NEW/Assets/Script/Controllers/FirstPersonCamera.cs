@@ -10,14 +10,17 @@ public class FirstPersonCamera : MonoBehaviour
 
     float xRotation = 0f;
 
-    Turret turretData;
+    //Turret turretData;
+    TowerControl towerControl;
 
     void OnEnable()
     {
         GameManager.instance.isFPM = true;
         GameManager.instance.MainCamera.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
-        turretData = GetComponentInParent<Turret>();
+        //turretData = GetComponentInParent<Turret>();
+        towerControl = GetComponentInParent<TowerControl>();
+
     }
 
     void Update()
@@ -62,11 +65,11 @@ public class FirstPersonCamera : MonoBehaviour
         bulletGO.transform.GetChild(0).gameObject.SetActive(false);
         Bullet bullet = bulletGO.GetComponent<Bullet>();
         bullet.isFPM = true;
-        bullet.damage = turretData.bulletDamage * 1.5f;
-        float bulletForce = turretData.bulletSpeed * 1.5f;
+        bullet.damage = towerControl._stat.BulletDamage * 1.5f;
+        float bulletForce = towerControl._stat.BulletSpeed * 1.5f;
 
-        bullet.firePoint = turretData.transform.position;
-        bullet.range = turretData.range;
+        bullet.firePoint = towerControl.transform.position;
+        bullet.range = towerControl._stat.Range;
 
         Rigidbody bulletRigidbody = bullet.GetComponent<Rigidbody>();
         // ÃÑ¾Ë¿¡ ÈûÀ» °¡ÇØ ¹ß»ç
@@ -77,7 +80,7 @@ public class FirstPersonCamera : MonoBehaviour
     void ExitFirstPersonMode()
     {
         GameManager.instance.isFPM = false;
-        turretData.isFPM = false;
+        towerControl.isFPM = false;
         gameObject.SetActive(false);
         GameManager.instance.MainCamera.SetActive(true);
         Cursor.lockState = CursorLockMode.None;

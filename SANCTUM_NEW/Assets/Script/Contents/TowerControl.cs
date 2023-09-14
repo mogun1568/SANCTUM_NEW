@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
 public class TowerControl : MonoBehaviour
 {
-    
-    TowerStat _stat;
+
+    [HideInInspector] public TowerStat _stat;
 
     private Transform target;
     //private Enemy targetEnemy;
@@ -15,22 +16,10 @@ public class TowerControl : MonoBehaviour
     //[HideInInspector] public ItemData data;
 
     [Header("General")]
-    [HideInInspector]
-    public float range;
-    [HideInInspector]
-    public float health;
 
     [Header("Use Bullets (default)")]
     //public GameObject bulletPrefab;     // 총알 프리팹
     string bulletType;
-    //[HideInInspector] public int bulletIndex;
-    [HideInInspector]
-    public float fireRate;              // 발사 간격
-    private float fireCountdown = 0f;   // 발사 시간 조정 변수
-    [HideInInspector]
-    public float bulletSpeed;
-    [HideInInspector]
-    public float bulletDamage;
 
     //[Header("Use Laser (default)")]
     //public bool useLaser = false;
@@ -47,10 +36,10 @@ public class TowerControl : MonoBehaviour
     public string enemyTag = "Enemy";
     public string towerTag = "Tower";
 
-    public Transform partToRotate;
+    [SerializeField] Transform partToRotate;
     public float turnSpeed = 10f;
 
-    public Transform firePoint;
+    [SerializeField] Transform firePoint;
 
     // 1인칭모드 변수
     public bool isFPM;
@@ -61,15 +50,23 @@ public class TowerControl : MonoBehaviour
 
     void OnEnable()
     {
-        itemData = Managers.Select.getItemData();
-
-        _stat = gameObject.GetComponent<TowerStat>();
-
-        if (itemData.itemName == "StandardTower")
+        partToRotate = Util.FindChild(gameObject, "PartToRotate", true)?.transform;
+        firePoint = Util.FindChild(gameObject, "FirePoint", true)?.transform;
+        if (firePoint == null)
         {
-            _stat.TowerType = "StandardTower";
+            Debug.Log("null");
+            firePoint = partToRotate;
         }
 
+        itemData = Managers.Select.getItemData();
+
+        gameObject.GetOrAddComponent<Poolable>();
+        _stat = gameObject.GetOrAddComponent<TowerStat>();
+
+        if (_stat.TowerType == "StandardTower")
+        {
+            _stat.IsStandard();
+        }
 
         target = null;
         isHealTower = false;
@@ -112,7 +109,7 @@ public class TowerControl : MonoBehaviour
             }
         }
 
-        if (nearestEnemy != null && shortestDistance <= range)
+        if (nearestEnemy != null && shortestDistance <= _stat.Range)
         {
             target = nearestEnemy.transform;
             //targetEnemy = nearestEnemy.GetComponent<Enemy>();          
@@ -163,7 +160,7 @@ public class TowerControl : MonoBehaviour
         //    Laser();
         //} else
         //{
-        if (fireCountdown <= 0f)
+        if (_stat.FireCountdown <= 0f)
         {
             if (!isHealTower)
             {
@@ -173,10 +170,10 @@ public class TowerControl : MonoBehaviour
             {
                 FindTowersInRadius();
             }
-            fireCountdown = 1f / fireRate;
+            _stat.FireCountdown = 1f / _stat.FireRate;
         }
 
-        fireCountdown -= Time.deltaTime;
+        _stat.FireCountdown -= Time.deltaTime;
         //}
     }
 
@@ -207,10 +204,10 @@ public class TowerControl : MonoBehaviour
 
     public void TakeDamage(float amount)
     {
-        health -= amount;
+        _stat.HP -= amount;
         //Debug.Log(health);
 
-        if (health <= 0)
+        if (_stat.HP <= 0)
         {
             // 함수로 구현 예정
             Managers.Sound.Play("Effects/Explosion", Define.Sound.Effect);
@@ -255,6 +252,7 @@ public class TowerControl : MonoBehaviour
 
     void Shoot()
     {
+        Debug.Log("shoot");
         Managers.Sound.Play("Effects/Arrow", Define.Sound.Effect);
         //GameManager.instance.soundManager.Play("Effects/Arrow", SoundManager.Sound.Effect);
         GameObject bulletGO = Managers.Resource.Instantiate($"Tower/Prefab/Bullet/{bulletType}");
@@ -263,8 +261,8 @@ public class TowerControl : MonoBehaviour
         bulletGO.transform.GetChild(0).gameObject.SetActive(true);
         Bullet bullet = bulletGO.GetComponent<Bullet>();
         bullet.isFPM = false;
-        bullet.speed = bulletSpeed;
-        bullet.damage = bulletDamage;
+        bullet.speed = _stat.BulletSpeed;
+        bullet.damage = _stat.BulletDamage;
 
         if (bullet != null)
         {
@@ -280,10 +278,10 @@ public class TowerControl : MonoBehaviour
         {
             //Debug.Log("2");
             float distanceToTower = Vector3.Distance(transform.position, tower.transform.position);
-            if (distanceToTower <= range && distanceToTower > 1)
+            if (distanceToTower <= _stat.Range && distanceToTower > 1)
             {
                 //Debug.Log("2");
-                Heal(tower, bulletDamage * 0.2f);
+                Heal(tower, _stat.BulletDamage * 0.2f);
             }
         }
     }
@@ -291,25 +289,25 @@ public class TowerControl : MonoBehaviour
     void Heal(GameObject _tower, float healAmount)
     {
         //Debug.Log("3");
-        float towerHealth = _tower.GetComponent<Turret>().health;
-        if (towerHealth + healAmount > 100f)
+        TowerStat towerStat = _tower.GetComponent<TowerControl>()._stat;
+        if (towerStat.HP + healAmount > towerStat.MaxHp)
         {
             // towerHealth 변수에 대한 지역적인 작업이므로 실제 Turret 컴포넌트의 health 값에는 영향을 주지 않음
             //towerHealth = 100f;
-            _tower.GetComponent<Turret>().health = 100f;
+            _tower.GetComponent<TowerControl>()._stat.HP = towerStat.MaxHp;
         }
         else
         {
             //towerHealth += healAmount;
-            _tower.GetComponent<Turret>().health += healAmount;
+            _tower.GetComponent<TowerControl>()._stat.HP += healAmount;
         }
-        Vector3 t = _tower.GetComponent<Turret>().transform.position;
+        //Vector3 t = _tower.GetComponent<Turret>().transform.position;
         //Debug.Log((t, towerHealth));
     }
 
-    void OnDrawGizmosSelected()
+    /*void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, range);
-    }
+        Gizmos.DrawWireSphere(transform.position, _stat.Range);
+    }*/
 }
