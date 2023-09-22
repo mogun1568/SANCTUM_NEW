@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 
-public class GameOver : MonoBehaviour
+public class GameOver : UI_Popup
 {
     public TextMeshProUGUI roundsText;
 

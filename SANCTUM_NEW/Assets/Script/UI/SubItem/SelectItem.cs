@@ -53,6 +53,8 @@ public class SelectItem : UI_Base
 
     public override void Init()
     {
+        Managers.UI.SelectItem = GetComponent<SelectItem>();
+
         Bind<GameObject>(typeof(GameObjects));
         Bind<TextMeshProUGUI>(typeof(Texts));
 

@@ -12,6 +12,8 @@ public class GameScene : BaseScene
 
         SceneType = Define.Scene.Game;
 
+        Managers.UI.ShowSceneUI<UI_Scene>("MainUI");
+
         //Managers.UI.ShowSceneUI<UI_Inven>();
 
         //Dictionary<string, Data.Item> dict = Managers.Data.ItemDict;

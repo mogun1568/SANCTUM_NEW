@@ -1,4 +1,4 @@
-using System;
+/*using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -41,11 +41,11 @@ public class InvenManager : UI_Base
         Bind<GameObject>(typeof(GameObjects));
         Bind<TextMeshProUGUI>(typeof(Texts));
 
-        /*GameObject inventory = Get<GameObject>((int)GameObjects.SelectItem);
+        GameObject inventory = Get<GameObject>((int)GameObjects.SelectItem);
         foreach (Transform child in inventory.transform)
         {
             Managers.Resource.Destroy(child.gameObject);
-        }*/
+        }
 
         // 실제 인벤토리 정보를 참고해서
         for (int i = 0; i < 3; i++)
@@ -125,4 +125,4 @@ public class InvenManager : UI_Base
         //itemUI.SetAsLastSibling();
         //itemUI.gameObject.SetActive(true);
     }
-}
+}*/

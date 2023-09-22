@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelUp : MonoBehaviour
+public class LevelUp : UI_Popup
 {
     RectTransform rect;
     Item[] items;
@@ -17,7 +17,7 @@ public class LevelUp : MonoBehaviour
     {
         Next();
         GameManager.instance.Stop();
-        rect.localScale = Vector3.one;
+        //rect.localScale = Vector3.one;
         Managers.Sound.Play("Effects/LevelUpLong", Define.Sound.Effect);
         //GameManager.instance.soundManager.Play("Effects/LevelUpLong", SoundManager.Sound.Effect);
     }

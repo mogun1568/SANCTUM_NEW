@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(EnemyControl))]
 public class EnemyStat : Stat
 {
     [SerializeField] public static float _addHp;
     [SerializeField] protected float _startSpeed;
     [SerializeField] protected float _speed;
 
-    public float AddHp { get { return _addHp; } set { _addHp = value; } }
+    public static float AddHp { get { return _addHp; } set { _addHp = value; } }
     public float StartSpeed { get { return _startSpeed; } set { _startSpeed = value; } }
     public float Speed { get { return _speed; } set { _speed = value; } }
 

@@ -20,15 +20,21 @@ public class EnemyControl : MonoBehaviour
     private Coroutine dotCoroutine;
     private Coroutine slowCoroutine;
 
-    public GameObject deathEffect;
-
-    [SerializeField] ParticleSystem gunParticle;
-
     void OnEnable() // pool 때문에 Start에서 OnEnable로 바꿈
     {
-        enemyData = Managers.Data.EnemyDict[gameObject.name];
+        int index = gameObject.name.IndexOf("(Clone)");
+        string enemyName;
+        if (index > 0)
+        {
+            enemyName = gameObject.name.Substring(0, index);
+        } else
+        {
+            enemyName = gameObject.name;
+        }
+        enemyData = Managers.Data.EnemyDict[enemyName];
 
         _stat = gameObject.GetOrAddComponent<EnemyStat>();
+        gameObject.GetOrAddComponent<EnemyMovement>();
         gameObject.GetOrAddComponent<Poolable>();
 
         isDie = false;
@@ -115,6 +121,7 @@ public class EnemyControl : MonoBehaviour
     public void AttackTower()
     {
         target.GetComponent<TowerControl>().TakeDamage(_stat.BulletDamage);
+        ParticleSystem gunParticle = Managers.Resource.Instantiate("GunParticle").GetComponent<ParticleSystem>();
         gunParticle.Play();
     }
 
@@ -210,8 +217,9 @@ public class EnemyControl : MonoBehaviour
 
     void InvokeDeath()
     {
-        GameObject effect = (GameObject)Instantiate(deathEffect, transform.position, Quaternion.identity);
-        Destroy(effect, 5f);
+        GameObject deathEffect = Managers.Resource.Instantiate("DeathEffect");
+        //GameObject effect = (GameObject)Instantiate(deathEffect, transform.position, Quaternion.identity);
+        Destroy(deathEffect, 5f);
 
         Managers.Resource.Destroy(gameObject);
         //gameObject.SetActive(false);

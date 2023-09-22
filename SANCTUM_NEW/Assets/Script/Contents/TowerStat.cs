@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(TowerControl))]
 public class TowerStat : Stat
 {
     [SerializeField] protected string _towerType = "StandardTower";

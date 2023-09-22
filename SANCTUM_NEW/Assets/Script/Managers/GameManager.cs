@@ -96,7 +96,9 @@ public class GameManager : MonoBehaviour
     {
         while (countLevelUp > 0)
         {
-            uiLevelUp.Show();
+            LevelUp ShowUI = Managers.UI.ShowPopupUI<LevelUp>("LevelUpUI");
+            ShowUI.Show();
+            //uiLevelUp.Show();
             countLevelUp--;
             // Hide() 함수가 실행되면 넘어가도록 해야됨
             isHide = false;

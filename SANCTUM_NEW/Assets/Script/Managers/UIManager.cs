@@ -9,6 +9,9 @@ public class UIManager
     Stack<UI_Popup> _popupStack = new Stack<UI_Popup>();
     UI_Scene _sceneUI = null;
 
+    SelectItem _selectItem;
+    public SelectItem SelectItem { get { return _selectItem; } set { _selectItem = value; } }
+
     public GameObject Root
     {
         get
@@ -26,6 +29,7 @@ public class UIManager
     {
         Canvas canvas = Util.GetOrAddComponent<Canvas>(go);
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        // 근데 캔버스에 이거 있는 것도 있고 없는 것도 있는데 뭐냐
         // canvas안에 canvas가 있어도 자기자신의 order를 가짐
         canvas.overrideSorting = true;
 
@@ -35,7 +39,7 @@ public class UIManager
             _order++;
         } else
         {
-            canvas.sortingOrder = 0;
+            canvas.sortingOrder = -1;
         }
     }
 

@@ -62,7 +62,7 @@ public class WaveSpawner : MonoBehaviour
                 otherScriptInstance.expand_map();
                 waveCount = Mathf.RoundToInt(waveCount * 1.2f);
                 Mathf.Clamp(waveCount, 0, 10);
-                Enemy.addHealth += 20;
+                EnemyStat.AddHp += 20;
             }
             StartCoroutine(SpawnWave());
             countdown = timeBetweenWaves;

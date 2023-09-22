@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Enemy))]
+[RequireComponent(typeof(EnemyControl))]
 public class EnemyMovement : MonoBehaviour
 {
     /*private Transform target;
@@ -52,7 +52,8 @@ public class EnemyMovement : MonoBehaviour
 
     private Vector3 target;
     private LinkedListNode<Vector3> Mnode;
-    private Enemy enemy;
+    //private Enemy enemy;
+    EnemyControl enemyControl;
 
     Animator anim;
 
@@ -67,12 +68,12 @@ public class EnemyMovement : MonoBehaviour
 
     void UpdateMoving()
     {
-        if (enemy.health <= 0)
+        if (enemyControl._stat.HP <= 0)
         {
             _state = MonsterState.Die;
         }
 
-        if (enemy.isAttack)
+        if (enemyControl.isAttack)
         {
             _state = MonsterState.Attacking;
         }
@@ -83,7 +84,7 @@ public class EnemyMovement : MonoBehaviour
             return;
         }
         Vector3 dir = target - transform.position;
-        transform.Translate(enemy.speed * Time.deltaTime * dir.normalized, Space.World);
+        transform.Translate(enemyControl._stat.Speed * Time.deltaTime * dir.normalized, Space.World);
 
         if (Vector3.Distance(transform.position, target) <= 0.4f)
         {
@@ -95,20 +96,20 @@ public class EnemyMovement : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), 10 * Time.deltaTime);
 
         // 애니메이션
-        anim.SetBool("isAttack", enemy.isAttack);
-        anim.SetFloat("health", enemy.health);
+        anim.SetBool("isAttack", enemyControl.isAttack);
+        anim.SetFloat("health", enemyControl._stat.HP);
 
         //enemy.speed = enemy.monster.startSpeed;
     }
 
     void UpdateAttacking()
     {
-        if (enemy.health <= 0)
+        if (enemyControl._stat.HP <= 0)
         {
             _state = MonsterState.Die;
         }
 
-        enemy.LockOnTarget();
+        enemyControl.LockOnTarget();
         anim.SetBool("isAttack", true);
     }
 
@@ -121,7 +122,7 @@ public class EnemyMovement : MonoBehaviour
     {
         Mnode = Map.points.First;
         target = Mnode.Value;
-        enemy = GetComponent<Enemy>();
+        enemyControl = GetComponent<EnemyControl>();
 
         _state = MonsterState.Moving;
         anim = GetComponent<Animator>();
@@ -136,7 +137,12 @@ public class EnemyMovement : MonoBehaviour
             return;
         }
 
-        if (enemy.health > 0 && !enemy.isAttack)
+        if (enemyControl == null)
+        {
+            Debug.Log("null");
+        }
+
+        if (enemyControl._stat.HP > 0 && !enemyControl.isAttack)
         {
             _state = MonsterState.Moving;
         }

@@ -13,7 +13,7 @@ public class Item : UI_Base
     Image icon;
     TextMeshProUGUI textName;
 
-    public GameObject selectItem;
+    //public GameObject selectItem;
 
     void Awake()
     {
@@ -36,8 +36,11 @@ public class Item : UI_Base
 
     public void ItemClick()
     {
-        selectItem.GetComponent<SelectItem>().AddItem(itemData.itemName);
-        GetComponentInParent<LevelUp>().Hide();
+        //selectItem.GetComponent<SelectItem>().AddItem(itemData.itemName);
+        Managers.UI.SelectItem.AddItem(itemData.itemName);
+        GetComponentInParent<LevelUp>().ClosePopupUI();
+        GameManager.instance.Resume();
+        GameManager.instance.isHide = true;
     }
 
     public void Onclick()

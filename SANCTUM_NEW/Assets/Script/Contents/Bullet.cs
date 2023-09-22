@@ -31,6 +31,10 @@ public class Bullet : MonoBehaviour
     {
         gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
         distanceFromTower = 0f;
+
+        // 임시방편 총알이 제위치에 나타난 뒤에 꼬리가 켜져야 이상하게 보이지 않음
+        // pool, resource 매니저 안에 SetPositionAndRotation() 함수 넣어야 할 듯
+        transform.GetChild(0).gameObject.SetActive(false);
     }
 
     void Update()
@@ -150,7 +154,7 @@ public class Bullet : MonoBehaviour
     // 데미지 (지금은 한대맞으면 바로 죽음)
     void Damage(Transform enemy)
     {
-        Enemy e = enemy.GetComponent<Enemy>();
+        EnemyControl e = enemy.GetComponent<EnemyControl>();
 
         if (e != null)
         {
@@ -161,7 +165,7 @@ public class Bullet : MonoBehaviour
     // 도트 데이지 코드
     void DotDamage(Transform enemy)
     {
-        Enemy e = enemy.GetComponent<Enemy>();
+        EnemyControl e = enemy.GetComponent<EnemyControl>();
 
         if (e != null)
         {
@@ -171,7 +175,7 @@ public class Bullet : MonoBehaviour
 
     void SlowSpeed(Transform enemy)
     {
-        Enemy e = enemy.GetComponent<Enemy>();
+        EnemyControl e = enemy.GetComponent<EnemyControl>();
 
         if (e != null)
         {
@@ -181,7 +185,7 @@ public class Bullet : MonoBehaviour
 
     void MassiveDamage(Transform enemy)
     {
-        Enemy e = enemy.GetComponent<Enemy>();
+        EnemyControl e = enemy.GetComponent<EnemyControl>();
 
         if (e != null)
         {
