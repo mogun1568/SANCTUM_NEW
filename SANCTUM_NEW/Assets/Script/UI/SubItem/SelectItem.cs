@@ -29,7 +29,8 @@ public class SelectItem : UI_Base
         Dirt,
         DamageUp,
         RangeUp,
-        FireRateUp
+        FireRateUp,
+        LifeRecovery
     }
 
     enum Texts

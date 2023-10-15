@@ -132,7 +132,7 @@ public class EnemyMovement : MonoBehaviour
 
     void Update()
     {
-        if (!GameManager.instance.isLive)
+        if (!Managers.Game.isLive)
         {
             return;
         }
@@ -176,7 +176,7 @@ public class EnemyMovement : MonoBehaviour
     {
         Managers.Sound.Play("Effects/Hit3", Define.Sound.Effect);
         //GameManager.instance.soundManager.Play("Effects/Hit3", SoundManager.Sound.Effect);
-        GameManager.instance.Lives--;
+        Managers.Game.Lives--;
         //WaveSpawner.EnemiesAlive--;
         Managers.Resource.Destroy(gameObject);
         //gameObject.SetActive(false);

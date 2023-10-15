@@ -34,6 +34,14 @@ public class EnemyControl : MonoBehaviour
         enemyData = Managers.Data.EnemyDict[enemyName];
 
         _stat = gameObject.GetOrAddComponent<EnemyStat>();
+        if (enemyData.enemyType != "Attack")
+        {
+            _stat.IsAttack();
+        }
+        if (enemyData.enemyType != "Boss")
+        {
+            _stat.IsBoss();
+        }
         gameObject.GetOrAddComponent<EnemyMovement>();
         gameObject.GetOrAddComponent<Poolable>();
 
@@ -49,7 +57,7 @@ public class EnemyControl : MonoBehaviour
 
     void UpdateTarget()
     {
-        if (!GameManager.instance.isLive)
+        if (!Managers.Game.isLive)
         {
             return;
         }
@@ -99,7 +107,7 @@ public class EnemyControl : MonoBehaviour
             return;
         }
 
-        if (!GameManager.instance.isLive)
+        if (!Managers.Game.isLive)
         {
             return;
         }
@@ -120,8 +128,9 @@ public class EnemyControl : MonoBehaviour
 
     public void AttackTower()
     {
+        Debug.Log("me");
         target.GetComponent<TowerControl>().TakeDamage(_stat.BulletDamage);
-        ParticleSystem gunParticle = Managers.Resource.Instantiate("GunParticle").GetComponent<ParticleSystem>();
+        ParticleSystem gunParticle = GetComponentInChildren<ParticleSystem>();
         gunParticle.Play();
     }
 
@@ -210,19 +219,26 @@ public class EnemyControl : MonoBehaviour
 
         //WaveSpawner.EnemiesAlive--;
 
-        GameManager.instance.GetExp(_stat.Exp);
+        Managers.Game.GetExp(_stat.Exp);
 
         Invoke("InvokeDeath", 1f);
     }
 
     void InvokeDeath()
     {
-        GameObject deathEffect = Managers.Resource.Instantiate("DeathEffect");
+        GameObject deathEffect = Managers.Resource.Instantiate("DeathEffect", transform.position, Quaternion.identity);
         //GameObject effect = (GameObject)Instantiate(deathEffect, transform.position, Quaternion.identity);
-        Destroy(deathEffect, 5f);
+        StartCoroutine(DestroyEffect(deathEffect));
 
         Managers.Resource.Destroy(gameObject);
         //gameObject.SetActive(false);
+    }
+
+    IEnumerator DestroyEffect(GameObject effect)
+    {
+        yield return new WaitForSeconds(5f);
+
+        Managers.Resource.Destroy(effect);
     }
 
     void OnDrawGizmosSelected()

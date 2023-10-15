@@ -2,16 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager
 {
-    public static GameManager instance;
+    //public static GameManager instance;
 
     [Header("# Game Control")]
     // 이거 제대로 쓰려면 모든 스크립트 Update 함수에 isLive 참일 때만 돌아가게 해야함 - 했음
     public bool isLive;
     public bool isFPM;
     public float gameTime;
-    public static bool GameIsOver;
+    public bool GameIsOver;
 
     [Header("# Player Info")]
     public int Lives;
@@ -23,14 +23,14 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public bool isHide;
 
     [Header("# Game Object")]
-    public PoolManager pool;
+    //public PoolManager pool;
     public Map map;
-    public GameObject gameOverUI;
-    public LevelUp uiLevelUp;
-    public GameObject MainCamera;
+    //public GameObject gameOverUI;
+    //public LevelUp uiLevelUp;
+    //public GameObject MainCamera;
     //public SoundManager soundManager;
 
-    void Start()
+    public void Init()
     {
         isLive = true;
         isFPM = false;
@@ -40,12 +40,12 @@ public class GameManager : MonoBehaviour
         countLevelUp = 0;
     }
 
-    void Awake()
+    /*void Awake()
     {
         instance = this;
-    }
+    }*/
 
-    void Update()
+    /*void Update()
     {
         if (GameIsOver)
         {
@@ -63,12 +63,14 @@ public class GameManager : MonoBehaviour
         }
 
         gameTime += Time.deltaTime;
-    }
+    }*/
 
-    void EndGame()
+    public void EndGame()
     {
         GameIsOver = true;
-        gameOverUI.SetActive(true);
+        //gameOverUI.SetActive(true);
+        Managers.UI.CloseAllPopupUI();
+        Managers.UI.ShowPopupUI<GameOver>("GameOverUI");
         Stop();
     }
 
@@ -86,23 +88,55 @@ public class GameManager : MonoBehaviour
             //Debug.Log(countLevelUp);
         }
 
-        if (countLevelUp > 0 && !isFPM)
+        /*if (countLevelUp > 0 && !isFPM)
         {
             StartCoroutine(WaitForItemSelection());
-        }
+        }*/
     }
 
     public IEnumerator WaitForItemSelection()
     {
         while (countLevelUp > 0)
         {
-            LevelUp ShowUI = Managers.UI.ShowPopupUI<LevelUp>("LevelUpUI");
-            ShowUI.Show();
+            Managers.UI.ShowPopupUI<LevelUp>("LevelUpUI");
+            //Debug.Log("aaa");
+            //ShowUI.Show();
             //uiLevelUp.Show();
             countLevelUp--;
             // Hide() 함수가 실행되면 넘어가도록 해야됨
             isHide = false;
             yield return new WaitUntil(() => isHide);
+        }
+    }
+
+    public bool isPopup = false, isSettingUI = false;
+    public void Toggle()
+    {
+        Managers.Sound.Play("Effects/UiClickLow", Define.Sound.Effect);
+        //GameManager.instance.soundManager.Play("Effects/UiClickLow", SoundManager.Sound.Effect);
+
+        if (isSettingUI)
+        {
+            Managers.UI.getPopStackTop().GetComponent<Setting>().Close();
+            //Managers.UI.ClosePopupUI();
+            //settingUI.SetActive(false);
+            return;
+        }
+
+        //ui.SetActive(!ui.activeSelf);
+
+        if (!isPopup)
+        {
+            Managers.UI.ShowPopupUI<PauseMenu>("PauseMenuUI");
+            isPopup = true;
+            Stop();
+        }
+        else
+        {
+            Managers.UI.ClosePopupUI();
+            isPopup = false;
+            Resume();
+            //GameManager.instance.soundManager.Play("Effects/UiClickLow", SoundManager.Sound.Effect);
         }
     }
 

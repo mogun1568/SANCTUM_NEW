@@ -25,6 +25,29 @@ public class ResourceManager
         return Resources.Load<T>(path);
     }
 
+    public GameObject Root
+    {
+        get
+        {
+            GameObject root = GameObject.Find("@EnablePool_Root");
+            if (root == null)
+            {
+                root = new GameObject { name = "@EnablePool_Root" };
+            }
+            return root;
+        }
+    }
+
+    public GameObject Instantiate(string path, Vector3 position, Quaternion rotation, Transform parent = null)
+    {
+        GameObject go = Instantiate(path, parent);
+        go.SetActive(false);
+        go.transform.SetPositionAndRotation(position, rotation);
+        go.SetActive(true);
+
+        return go;
+    }
+
     public GameObject Instantiate(string path, Transform parent = null)
     {
         // 1. original 이미 들고 있으면 바로 사용
@@ -38,7 +61,7 @@ public class ResourceManager
         // 2. 혹시 풀링된 애가 있을까?
         if (original.GetComponent<Poolable>() != null)
         {
-            return Managers.Pool.Pop(original, parent).gameObject;
+            return Managers.Pool.Pop(original, Root.transform).gameObject;
         }
 
         GameObject go = Object.Instantiate(original, parent);

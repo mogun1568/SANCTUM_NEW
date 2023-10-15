@@ -33,31 +33,38 @@ public class SelectMananger
         selectedNode = node;
         //itemUI = null;
 
-        //nodeUI.SetTarget(node);
+        NodeUI nodeUI = Managers.UI.ShowPopupUI<NodeUI>("NodeUI");
+        nodeUI.SetTarget(node);
     }
 
     // node 선택 해제 함수
     public void DeselectNode()
     {
         selectedNode = null;
+        // 원래는 nodeUI 스크립트에서 했는데 nodeUI가 클로즈되고 levelUp 프리팹이 나와야 하는데 실행 순서가 반대여서 여기로 옮김
+        Managers.UI.ClosePopupUI();
         //nodeUI.Hide();
     }
 
     public void SelectItemToUse(GameObject item, Data.Item _itemData)
     {
-        if (itemUI == item)   // 선택한 아이템을 또 선택하면
+        /*if (itemUI == item)   // 선택한 아이템을 또 선택하면
         {
             Debug.Log("Deselect Item");
             Clear();
             return;
-        }
+        }*/
 
         Clear();
         itemData = _itemData;
 
         Debug.Log($"{itemData.itemName} Selected");
         itemUI = item;
-        DeselectNode();
+
+        if (Managers.UI.getPopStackTop().name == "NodeUI")
+        {
+            DeselectNode();
+        }
     }
 
     public Data.Item getItemData()
@@ -72,6 +79,8 @@ public class SelectMananger
         //selectItem.GetComponent<SelectItem>().useItem(data.itemId);
         Clear();
     }
+
+
 
     public void DestroyItemUI()
     {

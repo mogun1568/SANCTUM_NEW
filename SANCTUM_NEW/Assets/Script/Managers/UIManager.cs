@@ -123,6 +123,11 @@ public class UIManager
         _order--;
     }
 
+    public GameObject getPopStackTop()
+    {
+        return _popupStack.Peek().gameObject;
+    }
+
     public void CloseAllPopupUI()
     {
         while (_popupStack.Count > 0)

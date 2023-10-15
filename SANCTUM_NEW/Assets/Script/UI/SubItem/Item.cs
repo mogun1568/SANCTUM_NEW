@@ -39,8 +39,8 @@ public class Item : UI_Base
         //selectItem.GetComponent<SelectItem>().AddItem(itemData.itemName);
         Managers.UI.SelectItem.AddItem(itemData.itemName);
         GetComponentInParent<LevelUp>().ClosePopupUI();
-        GameManager.instance.Resume();
-        GameManager.instance.isHide = true;
+        Managers.Game.Resume();
+        Managers.Game.isHide = true;
     }
 
     public void Onclick()

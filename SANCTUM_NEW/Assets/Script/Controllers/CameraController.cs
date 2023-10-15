@@ -5,7 +5,7 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     [SerializeField]
-    Define.CameraMode _mode = Define.CameraMode.QuarterView;
+   Define.CameraMode _mode = Define.CameraMode.QuarterView;
 
     /*[SerializeField]
     Vector3 _delta = new Vector3(0.0f, 6.0f, -5.0f);*/
@@ -16,13 +16,6 @@ public class CameraController : MonoBehaviour
     [SerializeField]
     float moveSpeed = 30f, scrollSpeed = 5f, minY = 15f, maxY = 80f;
 
-    public static float mouseSensitivitiy = 100f;
-    public Transform parentBody;
-    float xRotation = 0f;
-
-    Camera _towerCamera;
-    Turret _towerData;
-
     void Start()
     {
 
@@ -30,16 +23,17 @@ public class CameraController : MonoBehaviour
 
     void LateUpdate()
     {
-        if (GameManager.GameIsOver)
+        if (Managers.Game.GameIsOver)
         {
             this.enabled = false;
             return;
         }
 
-        if (!GameManager.instance.isLive)
+        if (!Managers.Game.isLive)
         {
             return;
         }
+
 
         if (_mode == Define.CameraMode.QuarterView)
         {
@@ -102,24 +96,6 @@ public class CameraController : MonoBehaviour
 
             transform.position = pos;
         }
-        else
-        {
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                // 코루틴을 다른 스크립트에서 쓸때도 StartCoroutine() 써줘야 함
-                GameManager.instance.StartCoroutine(GameManager.instance.WaitForItemSelection());
-                SetQuarterView();
-            }
-
-            float mouseX = Input.GetAxis("Mouse X") * mouseSensitivitiy * Time.deltaTime;
-            float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivitiy * Time.deltaTime;
-
-            xRotation -= mouseY;
-            xRotation = Mathf.Clamp(xRotation, -90f, 90f);  // 위아래 각도 제한
-
-            transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
-            parentBody.Rotate(Vector3.up * mouseX);
-        }
     }
 
     public void SetQuarterView()   // Vector3 delta
@@ -133,22 +109,5 @@ public class CameraController : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;*/
 
         //_delta = delta;
-    }
-
-    public void SetFirstPersonView()  // Vector3 delta
-    {
-        _mode = Define.CameraMode.FirstPersonView;
-
-        /*GameManager.instance.isFPM = true;
-        GameManager.instance.MainCamera.SetActive(false);
-        Cursor.lockState = CursorLockMode.Locked;*/
-
-        //_delta = delta;
-    }
-
-    public void GetTower(GameObject tower)
-    {
-        _towerCamera = tower.GetComponentInChildren<Camera>();
-        _towerData = tower.GetComponent<Turret>();
     }
 }

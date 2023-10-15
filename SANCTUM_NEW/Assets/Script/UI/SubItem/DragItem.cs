@@ -34,12 +34,17 @@ public class DragItem : UI_Base
         icon = GetComponentsInChildren<Image>()[6];
         icon.sprite = Managers.Resource.Load<Sprite>($"Icon/{itemData.itemIcon}");
 
-        BindEvent(gameObject, (PointerEventData data) => { OnBeginDrag(data); }, Define.UIEvent.BeginDrag);
-        BindEvent(gameObject, (PointerEventData data) => { OnDrag(data); }, Define.UIEvent.Drag);
-        BindEvent(gameObject, (PointerEventData data) => { OnEndDrag(data); }, Define.UIEvent.EndDrag);
+        if (itemData.itemType != "WorldOnlyItem") {
+            BindEvent(gameObject, (PointerEventData data) => { OnBeginDrag(); }, Define.UIEvent.BeginDrag);
+            BindEvent(gameObject, (PointerEventData data) => { OnDrag(data); }, Define.UIEvent.Drag);
+            BindEvent(gameObject, (PointerEventData data) => { OnEndDrag(); }, Define.UIEvent.EndDrag);
+        } else
+        {
+            BindEvent(gameObject, (PointerEventData data) => { Onclick(); }, Define.UIEvent.Click);
+        }
     }
 
-    public void OnBeginDrag(PointerEventData eventData)
+    public void OnBeginDrag()
     {
         normal_position = transform.position;
         normal_size = transform.localScale;
@@ -121,7 +126,7 @@ public class DragItem : UI_Base
         }
     }
 
-    public void OnEndDrag(PointerEventData eventData)
+    public void OnEndDrag()
     {
         transform.position = normal_position;
         transform.localScale = normal_size;
@@ -148,7 +153,7 @@ public class DragItem : UI_Base
             //GameManager.instance.soundManager.Play("Effects/userLife", SoundManager.Sound.Effect);
             Managers.Select.SelectItemToUse(gameObject, itemData);
             //buildManager.SelectItemToUse(gameObject, data);
-            GameManager.instance.Lives++;
+            Managers.Game.Lives++;
             Managers.Select.DestroyItemUI();
             //buildManager.DestroyItemUI();
         }

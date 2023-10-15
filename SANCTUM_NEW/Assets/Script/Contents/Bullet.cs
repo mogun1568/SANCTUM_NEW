@@ -14,7 +14,7 @@ public class Bullet : MonoBehaviour
     [HideInInspector] public float explosionRadius = 8f;
 
     //public bool isDot;
-    public GameObject imapctEffect;
+    //public GameObject imapctEffect;
 
     // 1인칭 모드 변수
     [HideInInspector] public bool isFPM;
@@ -29,17 +29,19 @@ public class Bullet : MonoBehaviour
 
     void OnEnable()
     {
+        gameObject.GetOrAddComponent<Poolable>();
+
         gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
         distanceFromTower = 0f;
 
         // 임시방편 총알이 제위치에 나타난 뒤에 꼬리가 켜져야 이상하게 보이지 않음
         // pool, resource 매니저 안에 SetPositionAndRotation() 함수 넣어야 할 듯
-        transform.GetChild(0).gameObject.SetActive(false);
+        //transform.GetChild(0).gameObject.SetActive(false);
     }
 
     void Update()
     {
-        if (!GameManager.instance.isLive)
+        if (!Managers.Game.isLive)
         {
             return;
         }
@@ -98,8 +100,9 @@ public class Bullet : MonoBehaviour
 
     void HitTarget()
     {
-        GameObject effectIns = (GameObject)Instantiate(imapctEffect, transform.position, transform.rotation);
-        Destroy(effectIns, 5f);
+        //GameObject effectIns = (GameObject)Instantiate(imapctEffect, transform.position, transform.rotation);
+        GameObject effectIns = Managers.Resource.Instantiate("BulletImpactEffect", transform.position, transform.rotation);
+        StartCoroutine(DestroyEffect(effectIns));
 
         // explosionRadius라는 범위 안에 있으면
         //if (explosionRadius > 0f)
@@ -136,6 +139,13 @@ public class Bullet : MonoBehaviour
 
         Managers.Resource.Destroy(gameObject);
         //gameObject.SetActive(false);
+    }
+
+    IEnumerator DestroyEffect(GameObject effect)
+    {
+        yield return new WaitForSeconds(5f);
+
+        Managers.Resource.Destroy(effect);
     }
 
     // 광범위 타격

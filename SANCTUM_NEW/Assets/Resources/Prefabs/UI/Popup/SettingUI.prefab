@@ -296,7 +296,7 @@ GameObject:
   - component: {fileID: 8060888099356725571}
   - component: {fileID: 7756473679040448187}
   m_Layer: 5
-  m_Name: Slider
+  m_Name: SoundSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1883,9 +1883,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8502d1cef145e8a4dade5fcc2b3244aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioMixer: {fileID: 24100000, guid: b92c0fab000088f4fb72cd040be18ba1, type: 2}
-  musicSlider: {fileID: 7756473679040448187}
-  mouseSlider: {fileID: 2783373927996668685}
 --- !u!1 &2786952427314745231
 GameObject:
   m_ObjectHideFlags: 0
@@ -7330,7 +7327,7 @@ GameObject:
   - component: {fileID: 6243051012445263734}
   - component: {fileID: 2783373927996668685}
   m_Layer: 5
-  m_Name: Slider
+  m_Name: MouseSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

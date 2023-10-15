@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DeveloperMode : MonoBehaviour
 {
-    void Start()
+    /*void Start()
     {
         
     }
@@ -53,5 +53,5 @@ public class DeveloperMode : MonoBehaviour
             //GameManager.instance.soundManager.Play("Effects/Hit3", SoundManager.Sound.Effect);
             GameManager.instance.Lives--;
         }
-    }
+    }*/
 }

@@ -16,18 +16,18 @@ public class Node : MonoBehaviour
 
     public bool enviroment;
 
-    public Vector3 GetBuildPosition()
-    {
-        return transform.position + new Vector3(0f, transform.localScale.y, 0f);
-    }
-
-    private void OnMouseDown()
+    void OnMouseDown()
     {
         if (turret != null)
         {
             Managers.Select.SelectNode(this);
             //buildManager.SelectNode(this);
         }
+    }
+
+    public Vector3 GetBuildPosition()
+    {
+        return transform.position + new Vector3(0f, transform.localScale.y, 0f);
     }
 
     public void UseItem()
@@ -85,13 +85,13 @@ public class Node : MonoBehaviour
     {
         Managers.Sound.Play("Effects/Build", Define.Sound.Effect);
         //GameManager.instance.soundManager.Play("Effects/Build", SoundManager.Sound.Effect);
-        GameObject _turret = Managers.Resource.Instantiate("Tower/Prefab/BallistaTowerlvl02");
-        _turret.transform.SetPositionAndRotation(GetBuildPosition(), Quaternion.identity);
+        GameObject _turret = Managers.Resource.Instantiate("Tower/Prefab/BallistaTowerlvl02", GetBuildPosition(), Quaternion.identity);
+        //_turret.transform.SetPositionAndRotation(GetBuildPosition(), Quaternion.identity);
         //GameObject _turret = GameManager.instance.pool.GetTower(0, 0, GetBuildPosition(), Quaternion.identity);
         turret = _turret;
         //turret.GetComponent<Turret>().data = data;
 
-        BulldEffect();
+        PracticeEffect("Launch Smoke");
         //GameObject effect = (GameObject)Instantiate(buildManager.buildEffect, GetBuildPosition(), Quaternion.identity);
         //Destroy(effect, 5f);
 
@@ -124,8 +124,8 @@ public class Node : MonoBehaviour
         upgradedNum++;
 
         // 원소 타워 생성
-        GameObject _turret = Managers.Resource.Instantiate($"Tower/Prefab/{itemData.itemName}Tower/{itemData.itemName}Towerlvl0{upgradedNum.ToString()}");
-        _turret.transform.SetPositionAndRotation(GetBuildPosition(), Quaternion.identity);
+        GameObject _turret = Managers.Resource.Instantiate($"Tower/Prefab/{itemData.itemName}Tower/{itemData.itemName}Towerlvl0{upgradedNum.ToString()}", GetBuildPosition(), Quaternion.identity);
+        //_turret.transform.SetPositionAndRotation(GetBuildPosition(), Quaternion.identity);
         //GameObject _turret = GameManager.instance.pool.GetTower(data.itemId, upgradedNum - 1, GetBuildPosition(), Quaternion.identity);
 
         // 타워 정보 이동
@@ -164,7 +164,7 @@ public class Node : MonoBehaviour
             healEffect.localScale = new Vector3(newTowerStat.Range * 2, healEffect.localScale.y, newTowerStat.Range * 2);
         }
 
-        BulldEffect();
+        PracticeEffect("Launch Smoke");
         //GameObject effect = (GameObject)Instantiate(buildManager.buildEffect, GetBuildPosition(), Quaternion.identity);
         //Destroy(effect, 5f);
 
@@ -216,14 +216,18 @@ public class Node : MonoBehaviour
         //Turret turretScript = turret.GetComponent<Turret>();
         TowerControl towerControl = turret.GetComponent<TowerControl>();
         towerControl.isFPM = true;
+
         // 비활성화된 오브젝트는 그냥 GetComponent로 못찾음 GetComponents<>(true)로 배열로 찾아서 사용해야 함
         turret.GetComponentsInChildren<Camera>(true)[0].gameObject.SetActive(true);
+
+        Managers.UI.ClosePopupUI();
+        Managers.UI.ShowPopupUI<FPSUI>("FPSModeUI");
     }
 
     public void DemoliteTower()
     {
         // 현재 exp += 이 node의 returnExp; // 이 코드 추가 예정
-        int remainExp = GameManager.instance.nextExp;
+        int remainExp = Managers.Game.nextExp;
 
         for (int i = 1; i < countItem / 2; i++)
         {
@@ -239,12 +243,12 @@ public class Node : MonoBehaviour
 
             // 4/8
         }
-        GameManager.instance.GetExp(remainExp);
+        Managers.Game.GetExp(remainExp);
         countItem = 0;
 
         Managers.Sound.Play("Effects/Explosion", Define.Sound.Effect);
         //GameManager.instance.soundManager.Play("Effects/Explosion", SoundManager.Sound.Effect);
-        BulldEffect();
+        PracticeEffect("Void Explosion");
         //GameObject effect = (GameObject)Instantiate(buildManager.destroyEffect, GetBuildPosition(), Quaternion.identity);
         //Destroy(effect, 5f);
 
@@ -258,11 +262,18 @@ public class Node : MonoBehaviour
         Debug.Log("Demolite Tower");
     }
 
-    void BulldEffect()
+    void PracticeEffect(string name)
     {
-        GameObject effect = Managers.Resource.Instantiate("Tower/Prefab/Launch Smoke");
-        effect.transform.SetPositionAndRotation(GetBuildPosition(), Quaternion.identity);
-        Destroy(effect, 5f);
+        GameObject effect = Managers.Resource.Instantiate($"Tower/Prefab/{name}", GetBuildPosition(), Quaternion.identity);
+        //effect.transform.SetPositionAndRotation(GetBuildPosition(), Quaternion.identity);
+        StartCoroutine(DestroyEffect(effect));
+    }
+
+    IEnumerator DestroyEffect(GameObject effect)
+    {
+        yield return new WaitForSeconds(5f);
+
+        Managers.Resource.Destroy(effect);
     }
 
     void OnMouseEnter()

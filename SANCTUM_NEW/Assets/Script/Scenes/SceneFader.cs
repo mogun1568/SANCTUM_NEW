@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEditor.Experimental.GraphView;
 
 public class SceneFader : MonoBehaviour
 {
@@ -13,9 +14,12 @@ public class SceneFader : MonoBehaviour
 
     public static bool isFading;
 
-    void Start()
+    public void Init()
     {
-        setting.IntialSetting();
+        //img = GetComponentInChildren<Image>();
+        img = Util.FindChild<Image>(gameObject, "Black", true);
+
+        //setting.IntialSetting();
         StartCoroutine(FadeIn());
     }
 
@@ -51,7 +55,7 @@ public class SceneFader : MonoBehaviour
         }
 
         //GameManager.instance.soundManager.Clear();
-        setting.ChangeScene();
+        //setting.ChangeScene();
         SceneManager.LoadScene(scene);
         Cursor.lockState = CursorLockMode.None;
     }

@@ -9,7 +9,7 @@ public class WaveSpawner : MonoBehaviour
     //public static int EnemiesAlive;
 
     //public GameObject[] monsters;
-    public Wave[] waves;
+    //public Wave[] waves;
     int waveCount = 5;
 
     public Transform spawnPoint;    // 스폰할 위치
@@ -22,7 +22,7 @@ public class WaveSpawner : MonoBehaviour
 
     //private int waveIndex = 0;
 
-    private Map otherScriptInstance;
+    [SerializeField] Map otherScriptInstance;
 
     //int monsterType;
 
@@ -32,7 +32,7 @@ public class WaveSpawner : MonoBehaviour
     {
         //EnemiesAlive = 0;
         //otherScriptInstance = GameObject.Find("GameMaster").GetComponent<Map>();
-        otherScriptInstance = GameManager.instance.map;
+        //otherScriptInstance = Managers.Game.map;
         //monsterType = GameManager.instance.pool.monsterPools.Length;
         SceneFader.isFading = false;
         Managers.Sound.Play("Bgms/old-story-from-scotland-147143", Define.Sound.Bgm);
@@ -41,7 +41,7 @@ public class WaveSpawner : MonoBehaviour
 
     void Update()
     {
-        if (!GameManager.instance.isLive)
+        if (!Managers.Game.isLive)
         {
             return;
         }
@@ -74,7 +74,7 @@ public class WaveSpawner : MonoBehaviour
         countdown = Mathf.Clamp(countdown, 0f, Mathf.Infinity);
 
         // 1분에 한번 출현
-        if (GameManager.instance.gameTime >= bossTime)
+        if (Managers.Game.gameTime >= bossTime)
         {
             Debug.Log("spawnBoss");
             GetComponent<WaveSpawner>().SpawnBossEnemy();
@@ -86,7 +86,7 @@ public class WaveSpawner : MonoBehaviour
 
     IEnumerator SpawnWave()
     {
-        GameManager.instance.Rounds++;
+        Managers.Game.Rounds++;
 
 
         yield return new WaitForSeconds(6f);
@@ -119,8 +119,9 @@ public class WaveSpawner : MonoBehaviour
     {
         // 몬스터 원점이 발임
         GameObject[] monsters = Resources.LoadAll<GameObject>("Prefabs/Monster");
-        GameObject monster = Managers.Resource.Instantiate($"Monster/{monsters[Random.Range(0, monsters.Length)].name}");
-        monster.transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
+        GameObject monster = Managers.Resource.Instantiate($"Monster/{monsters[Random.Range(0, monsters.Length)].name}", spawnPoint.position, spawnPoint.rotation);
+        //GameObject monster = Managers.Resource.Instantiate($"Monster/KnightDefault");
+        //monster.transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
         //GameManager.instance.pool.GetMonster(Random.Range(0, monsterType - 1), spawnPoint.position, spawnPoint.rotation); //  * Quaternion.Euler(0f, 180f, 0f)
         //Instantiate(enemy, spawnPoint.position - Vector3.up * 1.5f, spawnPoint.rotation);
         //EnemiesAlive++;

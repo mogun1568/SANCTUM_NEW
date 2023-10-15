@@ -25,6 +25,8 @@ public class Define
         Drag,
         BeginDrag,
         EndDrag,
+        Enter,
+        Exit
     }
 
     public enum MouseEvent

@@ -9,25 +9,21 @@ public class LevelUp : UI_Popup
 
     void Awake()
     {
+        base.Init();
+
         rect = GetComponent<RectTransform>();
         items = GetComponentsInChildren<Item>(true);
+
+        Show();
     }
 
     public void Show()
     {
         Next();
-        GameManager.instance.Stop();
+        Managers.Game.Stop();
         //rect.localScale = Vector3.one;
         Managers.Sound.Play("Effects/LevelUpLong", Define.Sound.Effect);
         //GameManager.instance.soundManager.Play("Effects/LevelUpLong", SoundManager.Sound.Effect);
-    }
-
-    public void Hide()
-    {
-        GameManager.instance.Resume();
-        //Time.timeScale = 1f;
-        rect.localScale = Vector3.zero;
-        GameManager.instance.isHide = true;
     }
 
     //public void Select(int index)
@@ -49,7 +45,7 @@ public class LevelUp : UI_Popup
         {
             ran[0] = Random.Range(0, items.Length); // items.Length
             ran[1] = Random.Range(0, items.Length);
-            ran[2] = Random.Range(0, items.Length);
+            ran[2] = Random.Range(9, items.Length);
 
             // 중복 검사
             if (ran[0] != ran[1] && ran[1] != ran[2] && ran[0] != ran[2])

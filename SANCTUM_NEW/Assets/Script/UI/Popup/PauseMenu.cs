@@ -1,20 +1,47 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PauseMenu : UI_Popup
 {
-    public GameObject ui;
+    //GameObject ui;
 
-    public string MainToLoad = "MainMenu";
+    string MainToLoad = "MainMenu";
 
-    public SceneFader sceneFader;
+    //public SceneFader sceneFader;
 
-    public GameObject settingUI;
+    //GameObject settingUI;
+
+    //bool isPopup = false, isSettingUI = false;
+
+    enum Buttons
+    {
+        Button_Setting,
+        Button_Continue,
+        Button_Retry,
+        Button_GoToMenu
+    }
+
+    void Awake()
+    {
+        //ui = Managers.Resource.Instantiate("UI/Popup/PauseMenuUI");
+        //settingUI = Managers.Resource.Instantiate("UI/Popup/SettingUI");
+        base.Init();
+
+        Bind<Button>(typeof(Buttons));
+
+        BindEvent(GetButton((int)Buttons.Button_Setting).gameObject, (PointerEventData data) => { Setting(); }, Define.UIEvent.Click);
+        BindEvent(GetButton((int)Buttons.Button_Continue).gameObject, (PointerEventData data) => { Managers.Game.Toggle(); }, Define.UIEvent.Click);
+        BindEvent(GetButton((int)Buttons.Button_Retry).gameObject, (PointerEventData data) => { Retry(); }, Define.UIEvent.Click);
+        BindEvent(GetButton((int)Buttons.Button_GoToMenu).gameObject, (PointerEventData data) => { Menu(); }, Define.UIEvent.Click);
+    }
 
     // Time.timescale = 0이면 Update문 실행안됨
-    void Update()
+    /*void Update()
     {
         //if (!GameManager.instance.isLive)
         //{
@@ -28,7 +55,7 @@ public class PauseMenu : UI_Popup
 
         if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P))
         {
-            Toggle();
+            Managers.Game.Toggle();
         }
     }
 
@@ -37,41 +64,48 @@ public class PauseMenu : UI_Popup
         Managers.Sound.Play("Effects/UiClickLow", Define.Sound.Effect);
         //GameManager.instance.soundManager.Play("Effects/UiClickLow", SoundManager.Sound.Effect);
 
-        if (settingUI.activeSelf)
+        if (isSettingUI)
         {
-            settingUI.SetActive(false);
+            Managers.UI.ClosePopupUI();
+            isSettingUI = false;
+            //settingUI.SetActive(false);
             return;
         }
 
-        ui.SetActive(!ui.activeSelf);
+        //ui.SetActive(!ui.activeSelf);
 
-        if (ui.activeSelf)
+        if (!isPopup)
         {
-            GameManager.instance.Stop();
+            Managers.UI.ShowPopupUI<UI_Popup>("PauseMenuUI");
+            isPopup = true;
+            Managers.Game.Stop();
         }
         else
         {
-            GameManager.instance.Resume();
+            Managers.UI.ClosePopupUI();
+            isPopup = false;
+            Managers.Game.Resume();
             //GameManager.instance.soundManager.Play("Effects/UiClickLow", SoundManager.Sound.Effect);
         }
-    }
+    }*/
 
     public void Retry()
     {
-        Toggle();
-        sceneFader.FadeTo(SceneManager.GetActiveScene().name);
+        Managers.Game.Toggle();
+        Managers.Scene.sceneFader.FadeTo(SceneManager.GetActiveScene().name);
     }
 
     public void Menu()
     {
-        Toggle();
-        sceneFader.FadeTo(MainToLoad);
+        Managers.Game.Toggle();
+        Managers.Scene.sceneFader.FadeTo(MainToLoad);
     }
 
     public void Setting()
     {
         Managers.Sound.Play("Effects/UiClickLow", Define.Sound.Effect);
         //GameManager.instance.soundManager.Play("Effects/UiClickLow", SoundManager.Sound.Effect);
-        settingUI.SetActive(true);
+        //settingUI.SetActive(true);
+        Managers.UI.ShowPopupUI<Setting>("SettingUI");
     }
 }

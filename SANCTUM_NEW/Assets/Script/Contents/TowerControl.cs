@@ -122,7 +122,7 @@ public class TowerControl : MonoBehaviour
 
     void Update()
     {
-        if (!GameManager.instance.isLive)
+        if (!Managers.Game.isLive)
         {
             return;
         }
@@ -212,14 +212,16 @@ public class TowerControl : MonoBehaviour
             // 함수로 구현 예정
             Managers.Sound.Play("Effects/Explosion", Define.Sound.Effect);
             //GameManager.instance.soundManager.Play("Effects/Explosion", SoundManager.Sound.Effect);
-            GameObject effect = Managers.Resource.Instantiate("Tower/Prefab/Void Explosion");
-            effect.transform.SetPositionAndRotation(transform.position, Quaternion.identity);
+            GameObject effect = Managers.Resource.Instantiate("Tower/Prefab/Void Explosion", transform.position, Quaternion.identity);
+            StartCoroutine(DestroyEffect(effect));
+            //effect.transform.SetPositionAndRotation(transform.position, Quaternion.identity);
             //GameObject effect = (GameObject)Instantiate(BuildManager.instance.destroyEffect, transform.position, Quaternion.identity);
 
             if (isFPM)
             {
-                GameManager.instance.MainCamera.SetActive(true);
-                GameManager.instance.isFPM = false;
+                Camera.main.gameObject.SetActive(true);
+                //GameManager.instance.MainCamera.SetActive(true);
+                Managers.Game.isFPM = false;
                 Cursor.lockState = CursorLockMode.None;
             }
 
@@ -255,10 +257,10 @@ public class TowerControl : MonoBehaviour
         Debug.Log("shoot");
         Managers.Sound.Play("Effects/Arrow", Define.Sound.Effect);
         //GameManager.instance.soundManager.Play("Effects/Arrow", SoundManager.Sound.Effect);
-        GameObject bulletGO = Managers.Resource.Instantiate($"Tower/Prefab/Bullet/{bulletType}");
-        bulletGO.transform.SetPositionAndRotation(firePoint.position, firePoint.rotation);
+        GameObject bulletGO = Managers.Resource.Instantiate($"Tower/Prefab/Bullet/{bulletType}", firePoint.position, firePoint.rotation);
+        //bulletGO.transform.SetPositionAndRotation(firePoint.position, firePoint.rotation);
         //GameObject bulletGO = GameManager.instance.pool.GetBullet(bulletIndex, firePoint.position, firePoint.rotation);
-        bulletGO.transform.GetChild(0).gameObject.SetActive(true);
+        //bulletGO.transform.GetChild(0).gameObject.SetActive(true);
         Bullet bullet = bulletGO.GetComponent<Bullet>();
         bullet.isFPM = false;
         bullet.speed = _stat.BulletSpeed;
@@ -305,9 +307,16 @@ public class TowerControl : MonoBehaviour
         //Debug.Log((t, towerHealth));
     }
 
-    /*void OnDrawGizmosSelected()
+    IEnumerator DestroyEffect(GameObject effect)
+    {
+        yield return new WaitForSeconds(5f);
+
+        Managers.Resource.Destroy(effect);
+    }
+
+    void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, _stat.Range);
-    }*/
+    }
 }

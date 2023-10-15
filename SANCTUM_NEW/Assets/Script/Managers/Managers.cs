@@ -8,6 +8,7 @@ public class Managers : MonoBehaviour
     static Managers Instance { get { Init(); return s_instance; } } // 유일한 매니저를 가져온다
 
     DataManager _data = new DataManager();
+    GameManager _game = new GameManager();
     InputManager _input = new InputManager();
     PoolManager _pool = new PoolManager();
     ResourceManager _resource = new ResourceManager();
@@ -17,6 +18,7 @@ public class Managers : MonoBehaviour
     UIManager _ui = new UIManager();
 
     public static DataManager Data { get { return Instance._data; } }
+    public static GameManager Game { get { return Instance._game; } }
     public static InputManager Input { get { return Instance._input; } }
     public static PoolManager Pool { get { return Instance._pool; } }
     public static ResourceManager Resource { get { return Instance._resource; } }
@@ -54,6 +56,8 @@ public class Managers : MonoBehaviour
             s_instance._data.Init();
             s_instance._pool.Init();
             s_instance._sound.Init();
+            s_instance._game.Init();
+            s_instance._scene.Init();
         }
     }
 

@@ -13,10 +13,14 @@ public class FirstPersonCamera : MonoBehaviour
     //Turret turretData;
     TowerControl towerControl;
 
+    GameObject mainCamera;
+
     void OnEnable()
     {
-        GameManager.instance.isFPM = true;
-        GameManager.instance.MainCamera.SetActive(false);
+        Managers.Game.isFPM = true;
+        mainCamera = Camera.main.gameObject;
+        mainCamera.SetActive(false);
+        //GameManager.instance.MainCamera.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
         //turretData = GetComponentInParent<Turret>();
         towerControl = GetComponentInParent<TowerControl>();
@@ -25,7 +29,7 @@ public class FirstPersonCamera : MonoBehaviour
 
     void Update()
     {
-        if (!GameManager.instance.isLive)
+        if (!Managers.Game.isLive)
         {
             return;
         }
@@ -35,7 +39,7 @@ public class FirstPersonCamera : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E))
         {
             // 코루틴을 다른 스크립트에서 쓸때도 StartCoroutine() 써줘야 함
-            GameManager.instance.StartCoroutine(GameManager.instance.WaitForItemSelection());
+            Managers.Game.WaitForItemSelection();
             ExitFirstPersonMode();
         }
 
@@ -59,10 +63,10 @@ public class FirstPersonCamera : MonoBehaviour
     {
         Managers.Sound.Play("Effects/Arrow", Define.Sound.Effect);
         //GameManager.instance.soundManager.Play("Effects/Arrow", SoundManager.Sound.Effect);
-        GameObject bulletGO = Managers.Resource.Instantiate("Tower/Prefab/Bullet/StandardBullet");
+        GameObject bulletGO = Managers.Resource.Instantiate("Tower/Prefab/Bullet/StandardBullet", transform.position, transform.rotation);
         bulletGO.transform.SetPositionAndRotation(transform.position, transform.rotation);
         //GameObject bulletGO = GameManager.instance.pool.GetBullet(turretData.bulletIndex, transform.position, transform.rotation);  // 총알 생성
-        bulletGO.transform.GetChild(0).gameObject.SetActive(false);
+        //bulletGO.transform.GetChild(0).gameObject.SetActive(false);
         Bullet bullet = bulletGO.GetComponent<Bullet>();
         bullet.isFPM = true;
         bullet.damage = towerControl._stat.BulletDamage * 1.5f;
@@ -76,13 +80,18 @@ public class FirstPersonCamera : MonoBehaviour
         bulletRigidbody.velocity = transform.forward * bulletForce;
     }
 
-
     void ExitFirstPersonMode()
     {
-        GameManager.instance.isFPM = false;
+        Managers.Game.isFPM = false;
         towerControl.isFPM = false;
-        gameObject.SetActive(false);
-        GameManager.instance.MainCamera.SetActive(true);
+
+        Managers.UI.ClosePopupUI();
+        Managers.UI.ShowPopupUI<UI_Inven>("InvenUI");
+
         Cursor.lockState = CursorLockMode.None;
+        mainCamera.SetActive(true);
+        gameObject.SetActive(false);
+        //GameManager.instance.MainCamera.SetActive(true);
+        //Cursor.lockState = CursorLockMode.None;
     }
 }
