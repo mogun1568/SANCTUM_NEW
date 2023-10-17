@@ -35,8 +35,6 @@ public class Setting : UI_Popup
         Bind<GameObject>(typeof(GameObjects));
         Bind<Button>(typeof(Buttons));
 
-        //soundSlider = Get<Slider>((int)GameObjects.SoundSlider);
-        //mouseSlider = Get<Slider>((int)GameObjects.MouseSlider);
         soundSlider = GetObject((int)GameObjects.SoundSlider).GetComponent<Slider>();
         mouseSlider = GetObject((int)GameObjects.MouseSlider).GetComponent<Slider>();
 
@@ -46,8 +44,6 @@ public class Setting : UI_Popup
         mouseSlider.onValueChanged.AddListener(Mouse);
 
         BindEvent(GetButton((int)Buttons.Button_Close).gameObject, (PointerEventData data) => { Close(); }, Define.UIEvent.Click);
-
-        //IntialSetting();
 
         Managers.Game.isSettingUI = true;
     }
@@ -75,7 +71,6 @@ public class Setting : UI_Popup
     public void Close()
     {
         Managers.Sound.Play("Effects/UiClickLow", Define.Sound.Effect);
-        //GameManager.instance.soundManager.Play("Effects/UiClickLow", SoundManager.Sound.Effect);
 
         ChangeScene();
 

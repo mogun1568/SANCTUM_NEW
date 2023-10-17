@@ -21,7 +21,6 @@ public class Node : MonoBehaviour
         if (turret != null)
         {
             Managers.Select.SelectNode(this);
-            //buildManager.SelectNode(this);
         }
     }
 
@@ -84,22 +83,15 @@ public class Node : MonoBehaviour
     void BuildTurret()
     {
         Managers.Sound.Play("Effects/Build", Define.Sound.Effect);
-        //GameManager.instance.soundManager.Play("Effects/Build", SoundManager.Sound.Effect);
         GameObject _turret = Managers.Resource.Instantiate("Tower/Prefab/BallistaTowerlvl02", GetBuildPosition(), Quaternion.identity);
-        //_turret.transform.SetPositionAndRotation(GetBuildPosition(), Quaternion.identity);
-        //GameObject _turret = GameManager.instance.pool.GetTower(0, 0, GetBuildPosition(), Quaternion.identity);
         turret = _turret;
-        //turret.GetComponent<Turret>().data = data;
 
         PracticeEffect("Launch Smoke");
-        //GameObject effect = (GameObject)Instantiate(buildManager.buildEffect, GetBuildPosition(), Quaternion.identity);
-        //Destroy(effect, 5f);
 
         element = "null";
         upgradedNum = 0;
 
         Debug.Log("Turret build!");
-        //buildManager.itemUITextDecrease();
         Managers.Select.itemUITextDecrease();
     }
 
@@ -119,32 +111,18 @@ public class Node : MonoBehaviour
         }
 
         Managers.Sound.Play("Effects/Build", Define.Sound.Effect);
-        //GameManager.instance.soundManager.Play("Effects/Build", SoundManager.Sound.Effect);
         Debug.Log($"{itemData.itemName} Upgrade {upgradedNum} -> {upgradedNum + 1}");
         upgradedNum++;
 
         // 원소 타워 생성
         GameObject _turret = Managers.Resource.Instantiate($"Tower/Prefab/{itemData.itemName}Tower/{itemData.itemName}Towerlvl0{upgradedNum.ToString()}", GetBuildPosition(), Quaternion.identity);
-        //_turret.transform.SetPositionAndRotation(GetBuildPosition(), Quaternion.identity);
-        //GameObject _turret = GameManager.instance.pool.GetTower(data.itemId, upgradedNum - 1, GetBuildPosition(), Quaternion.identity);
 
         // 타워 정보 이동
-        /*Turret turretComponent = turret.GetComponent<Turret>();
-        Turret _turretComponent = _turret.GetComponent<Turret>();
-
-        _turretComponent.range = turretComponent.range;
-        _turretComponent.fireRate = turretComponent.fireRate;
-        _turretComponent.bulletSpeed = turretComponent.bulletSpeed;
-        _turretComponent.bulletDamage = turretComponent.bulletDamage;
-        _turretComponent.health = turretComponent.health;
-
-        _turretComponent.health += 50;*/
-
         TowerStat curTowerStat = turret.GetComponent<TowerControl>()._stat;
         TowerStat newTowerStat = _turret.GetComponent<TowerControl>()._stat;
 
         newTowerStat.TowerType = element;
-        newTowerStat.HP = curTowerStat.HP;
+        newTowerStat.HP = curTowerStat.HP; // += 50 할지말지 고민중
         newTowerStat.Range = curTowerStat.Range;
         newTowerStat.FireRate = curTowerStat.FireRate;
         newTowerStat.BulletDamage = curTowerStat.BulletDamage;
@@ -152,10 +130,8 @@ public class Node : MonoBehaviour
 
         // 타워 변경
         Managers.Resource.Destroy(turret);
-        //turret.SetActive(false);
         turret = _turret;
 
-        //turret.GetComponent<Turret>().itemData = itemData;
         turret.GetComponent<TowerControl>().itemData = itemData;
 
         if (element == "Water")
@@ -165,19 +141,15 @@ public class Node : MonoBehaviour
         }
 
         PracticeEffect("Launch Smoke");
-        //GameObject effect = (GameObject)Instantiate(buildManager.buildEffect, GetBuildPosition(), Quaternion.identity);
-        //Destroy(effect, 5f);
+
 
         //Debug.Log("Applicate Element!");
         Managers.Select.itemUITextDecrease();
-        //buildManager.itemUITextDecrease();
     }
 
     void UseTowerOnlyItem(Data.Item itemData)
     {
         Managers.Sound.Play("Effects/Soundiron_Shimmer_Charms_Short_07 [2023-06-13 121009]", Define.Sound.Effect);
-        //GameManager.instance.soundManager.Play("Effects/Soundiron_Shimmer_Charms_Short_07 [2023-06-13 121009]", SoundManager.Sound.Effect);
-        //Turret turretScript = turret.GetComponent<Turret>();
         TowerStat towerStat = turret.GetComponent<TowerControl>()._stat;
 
         switch (itemData.itemName)
@@ -202,7 +174,6 @@ public class Node : MonoBehaviour
                 break;
         }
         Managers.Select.itemUITextDecrease();
-        //buildManager.itemUITextDecrease();
     }
 
     void UseWolrdOnlyItem(ItemData data)
@@ -213,7 +184,6 @@ public class Node : MonoBehaviour
     public void FirstPersonMode()
     {
         Debug.Log("First Person Mode");
-        //Turret turretScript = turret.GetComponent<Turret>();
         TowerControl towerControl = turret.GetComponent<TowerControl>();
         towerControl.isFPM = true;
 
@@ -247,17 +217,11 @@ public class Node : MonoBehaviour
         countItem = 0;
 
         Managers.Sound.Play("Effects/Explosion", Define.Sound.Effect);
-        //GameManager.instance.soundManager.Play("Effects/Explosion", SoundManager.Sound.Effect);
         PracticeEffect("Void Explosion");
-        //GameObject effect = (GameObject)Instantiate(buildManager.destroyEffect, GetBuildPosition(), Quaternion.identity);
-        //Destroy(effect, 5f);
 
         // 제거를 할 지 철거된 오브젝트로 변경할 지 고민 중
         Managers.Resource.Destroy(turret);
-        //turret.SetActive(false);
         turret = null;
-        //Destroy(turret);
-        //turretBlueprint = null;
 
         Debug.Log("Demolite Tower");
     }
@@ -265,7 +229,6 @@ public class Node : MonoBehaviour
     void PracticeEffect(string name)
     {
         GameObject effect = Managers.Resource.Instantiate($"Tower/Prefab/{name}", GetBuildPosition(), Quaternion.identity);
-        //effect.transform.SetPositionAndRotation(GetBuildPosition(), Quaternion.identity);
         StartCoroutine(DestroyEffect(effect));
     }
 
@@ -274,15 +237,5 @@ public class Node : MonoBehaviour
         yield return new WaitForSeconds(5f);
 
         Managers.Resource.Destroy(effect);
-    }
-
-    void OnMouseEnter()
-    {
-
-    }
-
-    void OnMouseExit()
-    {
-
     }
 }

@@ -10,16 +10,13 @@ public class TowerControl : MonoBehaviour
     [HideInInspector] public TowerStat _stat;
 
     private Transform target;
-    //private Enemy targetEnemy;
 
     [HideInInspector] public Data.Item itemData;
-    //[HideInInspector] public ItemData data;
 
     [Header("General")]
 
     [Header("Use Bullets (default)")]
-    //public GameObject bulletPrefab;     // ÃÑ¾Ë ÇÁ¸®ÆÕ
-    string bulletType;
+    string bulletType;  // ÃÑ¾Ë Å¸ÀÔ
 
     //[Header("Use Laser (default)")]
     //public bool useLaser = false;
@@ -45,8 +42,6 @@ public class TowerControl : MonoBehaviour
     public bool isFPM;
 
     public bool isHealTower;
-
-
 
     void OnEnable()
     {

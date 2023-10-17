@@ -75,11 +75,6 @@ public class GameScene : BaseScene
         Managers.Game.gameTime += Time.deltaTime;
     }
 
-    /*public void levelUp()
-    {
-        StartCoroutine(Managers.Game.WaitForItemSelection());
-    }*/
-
     public override void Clear()
     {
         

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class EnemyControl : MonoBehaviour
 {
-    //public MonsterData monster;
     [HideInInspector] public Data.Enemy enemyData;
 
     [HideInInspector] public EnemyStat _stat;
@@ -137,7 +136,6 @@ public class EnemyControl : MonoBehaviour
     public void TakeDamage(float amount)
     {
         _stat.HP -= amount;
-        //Debug.Log(health);
 
         if (!isDie && _stat.HP <= 0)
         {
@@ -196,28 +194,21 @@ public class EnemyControl : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
             TakeDamage(damageAmount);
             elapsedTime += 1f;
-            //Debug.Log(health);
         }
     }
-
-    //public AudioClip audioClip;
 
     void Die()
     {
         StopAllCoroutines();
 
         Managers.Sound.Play("Effects/Monster_Die", Define.Sound.Effect);
-        //GameManager.instance.soundManager.Play("Effects/Monster_Die", SoundManager.Sound.Effect);
 
         if (enemyData.enemyType == "Boss")
         {
             Managers.Sound.Play("Bgms/old-story-from-scotland-147143", Define.Sound.Bgm);
-            //GameManager.instance.soundManager.Play("Bgms/old-story-from-scotland-147143", SoundManager.Sound.Bgm);
         }
 
         Debug.Log("Die");
-
-        //WaveSpawner.EnemiesAlive--;
 
         Managers.Game.GetExp(_stat.Exp);
 
@@ -227,11 +218,9 @@ public class EnemyControl : MonoBehaviour
     void InvokeDeath()
     {
         GameObject deathEffect = Managers.Resource.Instantiate("DeathEffect", transform.position, Quaternion.identity);
-        //GameObject effect = (GameObject)Instantiate(deathEffect, transform.position, Quaternion.identity);
         StartCoroutine(DestroyEffect(deathEffect));
 
         Managers.Resource.Destroy(gameObject);
-        //gameObject.SetActive(false);
     }
 
     IEnumerator DestroyEffect(GameObject effect)

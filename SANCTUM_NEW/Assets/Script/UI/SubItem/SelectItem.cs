@@ -5,7 +5,6 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 using Unity.VisualScripting;
-// using UnityEditor.UIElements;
 
 public class SelectItem : UI_Base
 {
@@ -189,8 +188,6 @@ public class SelectItem : UI_Base
             {
                 StartCoroutine(StartLerpDown());
             }
-
         }
-
     }
 }

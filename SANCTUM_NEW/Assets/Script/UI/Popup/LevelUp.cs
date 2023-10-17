@@ -21,15 +21,8 @@ public class LevelUp : UI_Popup
     {
         Next();
         Managers.Game.Stop();
-        //rect.localScale = Vector3.one;
         Managers.Sound.Play("Effects/LevelUpLong", Define.Sound.Effect);
-        //GameManager.instance.soundManager.Play("Effects/LevelUpLong", SoundManager.Sound.Effect);
     }
-
-    //public void Select(int index)
-    //{
-    //    items[index].Onclick();
-    //}
 
     void Next()
     {

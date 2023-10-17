@@ -25,9 +25,6 @@ public class NodeUI : UI_Popup
         fireRateText
     }
 
-    /*Slider hp;
-    TextMeshProUGUI damageText;
-    TextMeshProUGUI fireRateText;*/
     Transform sphere;
     Transform sphere1;
 
@@ -36,22 +33,11 @@ public class NodeUI : UI_Popup
 
 
     Node target;
-    //private Turret tower;
     TowerControl towerControl;
     //public TextMeshProUGUI retrunExp; // 추가 예정
 
-
-    //[SerializeField] Camera cam;
-    //[SerializeField] RectTransform height;
-    //[SerializeField] RectTransform uiElementRectTransform;
-    //[SerializeField] RectTransform a;
-    //[SerializeField] RectTransform b;
-
     void Start()
     {
-        //ui.SetActive(false);
-        //boundary.SetActive(false);
-
         Bind<GameObject>(typeof(GameObjects));
         Bind<TextMeshProUGUI>(typeof(Texts));
         fPMButton = GetObject((int)GameObjects.FirstPersonMode);
@@ -61,6 +47,15 @@ public class NodeUI : UI_Popup
 
         BindEvent(fPMButton, (PointerEventData data) => { FirstPersonMode(); }, Define.UIEvent.Click);
         BindEvent(DelButton, (PointerEventData data) => { Demolite(); }, Define.UIEvent.Click);
+
+        if (towerControl.itemData.itemName == "Water")
+        {
+            fPMButton.SetActive(false);
+        }
+        else
+        {
+            fPMButton.SetActive(true);
+        }
     }
     void Update()
     {
@@ -70,8 +65,6 @@ public class NodeUI : UI_Popup
         Vector3 screenPosition = uiElementRectTransform.TransformPoint(anchoredPosition3D);  // 화면 좌표계로 변환
 
         // screenPosition을 사용하여 UI 요소의 화면 좌표계 위치 활용
-
-
         Vector3 uiScreenPoint = screenPosition;  // UI의 화면 좌표계 위치
 
         Vector3 uiNormal = Camera.main.transform.forward;  // UI 평면의 법선 벡터
@@ -81,7 +74,6 @@ public class NodeUI : UI_Popup
         Plane cameraPlane = new Plane(cameraPlaneNormal, Camera.main.transform.position);  // 카메라 평면 생성
 
         float distance = Mathf.Abs(cameraPlane.GetDistanceToPoint(uiScreenPoint));
-        //Debug.Log(distance);
 
         uiElementRectTransform.localScale = new Vector3(distance * 0.003f, distance * 0.003f, 0f);  // 크기 조정
 
@@ -104,22 +96,19 @@ public class NodeUI : UI_Popup
 
         transform.position = target.GetBuildPosition();
 
-        //tower = target.turret.GetComponent<Turret>();
         towerControl = target.turret.GetComponent<TowerControl>();
 
         //retrunExp.text = 경헙치 + "Exp"  // 추가 예정
 
-        //ui.SetActive(true);
-        //boundary.SetActive(true);
-        if (towerControl.itemData.itemName == "Water")
-        {
-            fPMButton.SetActive(false);
-        }
-        /*else
-        {
-            fPMButton.SetActive(true);
-        }*/
-
+        // 왜 start 함수보다 먼저 실행되는지 모르겠는데 일단 해당 코드를 start 함수로 옮겨서 수정함
+        //if (towerControl.itemData.itemName == "Water")
+        //{
+        //    fPMButton.SetActive(false);
+        //}
+        //else
+        //{
+        //    fPMButton.SetActive(true);
+        //}
     }
 
     void ChangeInfo()

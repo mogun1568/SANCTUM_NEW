@@ -36,7 +36,6 @@ public class WaveSpawner : MonoBehaviour
         //monsterType = GameManager.instance.pool.monsterPools.Length;
         SceneFader.isFading = false;
         Managers.Sound.Play("Bgms/old-story-from-scotland-147143", Define.Sound.Bgm);
-        //GameManager.instance.soundManager.Play("Bgms/old-story-from-scotland-147143", SoundManager.Sound.Bgm);
     }
 
     void Update()
@@ -80,8 +79,6 @@ public class WaveSpawner : MonoBehaviour
             GetComponent<WaveSpawner>().SpawnBossEnemy();
             bossTime *= 2f;
         }
-
-        //waveCountdownText.text = string.Format("{0:00.00}", countdown);
     }
 
     IEnumerator SpawnWave()
@@ -115,25 +112,20 @@ public class WaveSpawner : MonoBehaviour
         //}
     }
 
+    GameObject[] monsters;
     void SpawnEnemy()
     {
         // 몬스터 원점이 발임
-        GameObject[] monsters = Resources.LoadAll<GameObject>("Prefabs/Monster");
-        GameObject monster = Managers.Resource.Instantiate($"Monster/{monsters[Random.Range(0, monsters.Length)].name}", spawnPoint.position, spawnPoint.rotation);
-        //GameObject monster = Managers.Resource.Instantiate($"Monster/KnightDefault");
-        //monster.transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
-        //GameManager.instance.pool.GetMonster(Random.Range(0, monsterType - 1), spawnPoint.position, spawnPoint.rotation); //  * Quaternion.Euler(0f, 180f, 0f)
-        //Instantiate(enemy, spawnPoint.position - Vector3.up * 1.5f, spawnPoint.rotation);
+        monsters = Resources.LoadAll<GameObject>("Prefabs/Monster");
+        GameObject monster = Managers.Resource.Instantiate($"Monster/{monsters[Random.Range(0, monsters.Length - 1)].name}", spawnPoint.position, spawnPoint.rotation);
         //EnemiesAlive++;
     }
 
     public void SpawnBossEnemy()
     {
-        //Debug.Log("spawnBoss");
+        Debug.Log("spawnBoss");
         Managers.Sound.Play("Bgms/battle-of-the-dragons-8037", Define.Sound.Bgm);
-        //GameManager.instance.soundManager.Play("Bgms/battle-of-the-dragons-8037", SoundManager.Sound.Bgm);
-        // 이거 새로운 pool 방식으로 고쳐야 됨
-        //GameManager.instance.pool.GetMonster(monsterType - 1, spawnPoint.position, spawnPoint.rotation);
+        GameObject monster = Managers.Resource.Instantiate($"Monster/{monsters[monsters.Length - 1].name}", spawnPoint.position, spawnPoint.rotation);
     }
 }
 

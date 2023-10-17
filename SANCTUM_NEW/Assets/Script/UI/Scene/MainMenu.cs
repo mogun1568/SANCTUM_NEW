@@ -11,8 +11,6 @@ public class MainMenu : UI_Scene
 
     public SceneFader sceneFader;
 
-    //public GameObject settingUI;
-
     enum Buttons {
         PlayButton,
         SettingButton,
@@ -24,7 +22,6 @@ public class MainMenu : UI_Scene
         base.Init();
 
         Managers.Sound.Play("Bgms/bgm2", Define.Sound.Bgm);
-        //GameManager.instance.soundManager.Play("Bgms/bgm2", SoundManager.Sound.Bgm);
         SceneFader.isFading = false;
 
         Bind<Button>(typeof(Buttons));
@@ -38,21 +35,18 @@ public class MainMenu : UI_Scene
     public void Play()
     {
         Managers.Sound.Play("Effects/UiClickLow", Define.Sound.Effect);
-        //GameManager.instance.soundManager.Play("Effects/UiClickLow", SoundManager.Sound.Effect);
         sceneFader.FadeTo(GameToLoad);
     }
 
     public void Setting()
     {
         Managers.Sound.Play("Effects/UiClickLow", Define.Sound.Effect);
-        //GameManager.instance.soundManager.Play("Effects/UiClickLow", SoundManager.Sound.Effect);
         Managers.UI.ShowPopupUI<Setting>("SettingUI");
     }
 
     public void Quit()
     {
         Managers.Sound.Play("Effects/UiClickLow", Define.Sound.Effect);
-        //GameManager.instance.soundManager.Play("Effects/UiClickLow", SoundManager.Sound.Effect);
         Debug.Log("Exciting...");
         Application.Quit();
     }

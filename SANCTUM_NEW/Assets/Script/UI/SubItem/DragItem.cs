@@ -11,9 +11,7 @@ public class DragItem : UI_Base
 
     GameObject SilhouetteItem;
 
-    Map map;
-    BuildManager buildManager;
-    //public ItemData data;
+    //Map map;
     Data.Item itemData;
 
     private RaycastHit hit;
@@ -29,7 +27,6 @@ public class DragItem : UI_Base
 
     public override void Init()
     {
-        //Debug.Log(gameObject.name);
         itemData = Managers.Data.ItemDict[gameObject.name];
         icon = GetComponentsInChildren<Image>()[6];
         icon.sprite = Managers.Resource.Load<Sprite>($"Icon/{itemData.itemIcon}");
@@ -49,7 +46,6 @@ public class DragItem : UI_Base
         normal_position = transform.position;
         normal_size = transform.localScale;
         Managers.Select.SelectItemToUse(gameObject, itemData);
-        //buildManager.SelectItemToUse(gameObject, data);
         if (itemData.itemType == "Tower")
         {
             SilhouetteItem = Managers.Resource.Instantiate("ItemE_Tower");
@@ -83,8 +79,6 @@ public class DragItem : UI_Base
         Physics.Raycast(ray, out hit);
         if (hit.transform.name == "ForestGround01(Clone)")
         {
-            //Debug.Log("OnNode");
-
             if (itemData.itemType == "Tower")
             {
                 if ((hit.transform.GetComponent<Node>().turret != null || !hit.transform.GetComponent<Node>().turret) && !hit.transform.GetComponent<Node>().enviroment)
@@ -138,29 +132,23 @@ public class DragItem : UI_Base
             }
         }
         Managers.Select.Clear();
-        //buildManager.Clear();
         Destroy(SilhouetteItem);
         SilhouetteItem = null;
     }
 
     public void Onclick()
     {
-        //Debug.Log($"{data.itemName} Selected");
-
         if (itemData.itemType == "WorldOnlyItem")
         {
             Managers.Sound.Play("Effects/userLife", Define.Sound.Effect);
-            //GameManager.instance.soundManager.Play("Effects/userLife", SoundManager.Sound.Effect);
             Managers.Select.SelectItemToUse(gameObject, itemData);
-            //buildManager.SelectItemToUse(gameObject, data);
             Managers.Game.Lives++;
             Managers.Select.DestroyItemUI();
-            //buildManager.DestroyItemUI();
         }
     }
 
-    void Start()
-    {
-        map = GameObject.Find("GameMaster").GetComponent<Map>();
-    }
+    //void Start()
+    //{
+    //    map = GameObject.Find("GameMaster").GetComponent<Map>();
+    //}
 }

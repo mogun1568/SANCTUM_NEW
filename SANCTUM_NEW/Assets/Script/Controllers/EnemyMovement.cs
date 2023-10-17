@@ -80,7 +80,6 @@ public class EnemyMovement : MonoBehaviour
 
         if (Mnode == null)
         {
-            //Debug.Log("ERROR");
             return;
         }
         Vector3 dir = target - transform.position;
@@ -175,10 +174,8 @@ public class EnemyMovement : MonoBehaviour
     void EndPath()
     {
         Managers.Sound.Play("Effects/Hit3", Define.Sound.Effect);
-        //GameManager.instance.soundManager.Play("Effects/Hit3", SoundManager.Sound.Effect);
         Managers.Game.Lives--;
         //WaveSpawner.EnemiesAlive--;
         Managers.Resource.Destroy(gameObject);
-        //gameObject.SetActive(false);
     }
 }
