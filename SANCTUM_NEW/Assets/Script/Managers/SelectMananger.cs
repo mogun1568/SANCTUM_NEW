@@ -29,6 +29,7 @@ public class SelectMananger
             DeselectNode();
             return;
         }
+        DeselectNode();
 
         selectedNode = node;
         //itemUI = null;
@@ -42,7 +43,11 @@ public class SelectMananger
     {
         selectedNode = null;
         // 원래는 nodeUI 스크립트에서 했는데 nodeUI가 클로즈되고 levelUp 프리팹이 나와야 하는데 실행 순서가 반대여서 여기로 옮김
-        Managers.UI.ClosePopupUI();
+        Debug.Log(Managers.UI.getPopStackTop().name);
+        if (Managers.UI.getPopStackTop().name == "NodeUI")
+        {
+            Managers.UI.ClosePopupUI();
+        }
         //nodeUI.Hide();
     }
 

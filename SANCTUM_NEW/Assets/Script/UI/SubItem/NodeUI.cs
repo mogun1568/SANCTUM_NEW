@@ -38,6 +38,8 @@ public class NodeUI : UI_Popup
 
     void Start()
     {
+        transform.rotation = Quaternion.Euler(0, 45, 0);
+
         Bind<GameObject>(typeof(GameObjects));
         Bind<TextMeshProUGUI>(typeof(Texts));
         fPMButton = GetObject((int)GameObjects.FirstPersonMode);
@@ -59,6 +61,11 @@ public class NodeUI : UI_Popup
     }
     void Update()
     {
+        if (target.turret == null)
+        {
+            Managers.UI.ClosePopupUI();
+        }
+
         RectTransform uiElementRectTransform = GetComponentInChildren<RectTransform>();  // UI 요소의 RectTransform 컴포넌트 가져오기
 
         Vector3 anchoredPosition3D = uiElementRectTransform.anchoredPosition3D;  // UI 요소의 앵커드 위치 가져오기

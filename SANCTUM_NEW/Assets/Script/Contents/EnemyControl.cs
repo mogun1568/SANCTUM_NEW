@@ -32,17 +32,17 @@ public class EnemyControl : MonoBehaviour
         }
         enemyData = Managers.Data.EnemyDict[enemyName];
 
+        gameObject.GetOrAddComponent<EnemyMovement>();
+        gameObject.GetOrAddComponent<Poolable>();
         _stat = gameObject.GetOrAddComponent<EnemyStat>();
-        if (enemyData.enemyType != "Attack")
+        if (enemyData.enemyType == "Attack")
         {
             _stat.IsAttack();
         }
-        if (enemyData.enemyType != "Boss")
+        if (enemyData.enemyType == "Boss")
         {
             _stat.IsBoss();
         }
-        gameObject.GetOrAddComponent<EnemyMovement>();
-        gameObject.GetOrAddComponent<Poolable>();
 
         isDie = false;
         target = null;

@@ -60,7 +60,7 @@ public class TowerControl : MonoBehaviour
 
         if (_stat.TowerType == "StandardTower")
         {
-            _stat.IsStandard();
+            _stat.IsStandard(); 
         }
 
         target = null;
@@ -214,10 +214,10 @@ public class TowerControl : MonoBehaviour
 
             if (isFPM)
             {
-                Camera.main.gameObject.SetActive(true);
-                //GameManager.instance.MainCamera.SetActive(true);
-                Managers.Game.isFPM = false;
-                Cursor.lockState = CursorLockMode.None;
+                GetComponentInChildren<FirstPersonCamera>().ExitFirstPersonMode();
+                //Camera.main.gameObject.SetActive(true);
+                //Managers.Game.isFPM = false;
+                //Cursor.lockState = CursorLockMode.None;
             }
 
             Managers.Resource.Destroy(gameObject);

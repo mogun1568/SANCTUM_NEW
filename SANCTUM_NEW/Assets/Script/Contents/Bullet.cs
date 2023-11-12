@@ -30,6 +30,11 @@ public class Bullet : MonoBehaviour
 
         gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
         distanceFromTower = 0f;
+
+        if (type == InfoType.General)
+        {
+            transform.GetChild(0).gameObject.SetActive(true);
+        }
     }
 
     void Update()

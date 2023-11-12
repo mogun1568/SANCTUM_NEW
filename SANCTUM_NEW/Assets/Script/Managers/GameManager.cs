@@ -22,9 +22,9 @@ public class GameManager
     public int countLevelUp;
     [HideInInspector] public bool isHide;
 
-    [Header("# Game Object")]
+    //[Header("# Game Object")]
     //public PoolManager pool;
-    public Map map;
+    //public Map map;
     //public GameObject gameOverUI;
     //public LevelUp uiLevelUp;
     //public GameObject MainCamera;
@@ -99,7 +99,6 @@ public class GameManager
         while (countLevelUp > 0)
         {
             Managers.UI.ShowPopupUI<LevelUp>("LevelUpUI");
-            //Debug.Log("aaa");
             //ShowUI.Show();
             //uiLevelUp.Show();
             countLevelUp--;

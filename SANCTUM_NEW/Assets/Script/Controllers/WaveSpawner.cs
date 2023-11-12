@@ -28,6 +28,8 @@ public class WaveSpawner : MonoBehaviour
 
     float bossTime = 60f;
 
+    GameObject[] monsters;
+
     void Start()
     {
         //EnemiesAlive = 0;
@@ -36,6 +38,7 @@ public class WaveSpawner : MonoBehaviour
         //monsterType = GameManager.instance.pool.monsterPools.Length;
         SceneFader.isFading = false;
         Managers.Sound.Play("Bgms/old-story-from-scotland-147143", Define.Sound.Bgm);
+        monsters = Resources.LoadAll<GameObject>("Prefabs/Monster");
     }
 
     void Update()
@@ -85,7 +88,6 @@ public class WaveSpawner : MonoBehaviour
     {
         Managers.Game.Rounds++;
 
-
         yield return new WaitForSeconds(6f);
         for (int i = 0; i < waveCount; i++)
         {
@@ -112,12 +114,16 @@ public class WaveSpawner : MonoBehaviour
         //}
     }
 
-    GameObject[] monsters;
     void SpawnEnemy()
     {
         // 몬스터 원점이 발임
-        monsters = Resources.LoadAll<GameObject>("Prefabs/Monster");
-        GameObject monster = Managers.Resource.Instantiate($"Monster/{monsters[Random.Range(0, monsters.Length - 1)].name}", spawnPoint.position, spawnPoint.rotation);
+        int idx = Random.Range(0, monsters.Length);
+        while (monsters[idx].name == "SalarymanDefault")
+        {
+            idx = Random.Range(0, monsters.Length);
+        }
+        Debug.Log(monsters[Random.Range(0, monsters.Length)].name);
+        GameObject monster = Managers.Resource.Instantiate($"Monster/{monsters[idx].name}", spawnPoint.position, spawnPoint.rotation);
         //EnemiesAlive++;
     }
 
@@ -125,7 +131,7 @@ public class WaveSpawner : MonoBehaviour
     {
         Debug.Log("spawnBoss");
         Managers.Sound.Play("Bgms/battle-of-the-dragons-8037", Define.Sound.Bgm);
-        GameObject monster = Managers.Resource.Instantiate($"Monster/{monsters[monsters.Length - 1].name}", spawnPoint.position, spawnPoint.rotation);
+        GameObject monster = Managers.Resource.Instantiate("Monster/SalarymanDefault", spawnPoint.position, spawnPoint.rotation);
     }
 }
 

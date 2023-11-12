@@ -59,7 +59,8 @@ public class FirstPersonCamera : MonoBehaviour
     {
         Managers.Sound.Play("Effects/Arrow", Define.Sound.Effect);
         GameObject bulletGO = Managers.Resource.Instantiate("Tower/Prefab/Bullet/StandardBullet", transform.position, transform.rotation);
-        bulletGO.transform.SetPositionAndRotation(transform.position, transform.rotation);
+        bulletGO.transform.GetChild(0).gameObject.SetActive(false);
+        //bulletGO.transform.SetPositionAndRotation(transform.position, transform.rotation);
         Bullet bullet = bulletGO.GetComponent<Bullet>();
         bullet.isFPM = true;
         bullet.damage = towerControl._stat.BulletDamage * 1.5f;
@@ -73,7 +74,7 @@ public class FirstPersonCamera : MonoBehaviour
         bulletRigidbody.velocity = transform.forward * bulletForce;
     }
 
-    void ExitFirstPersonMode()
+    public void ExitFirstPersonMode()
     {
         Managers.Game.isFPM = false;
         towerControl.isFPM = false;
