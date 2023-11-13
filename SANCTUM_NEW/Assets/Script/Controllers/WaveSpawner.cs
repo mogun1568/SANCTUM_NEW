@@ -36,7 +36,7 @@ public class WaveSpawner : MonoBehaviour
         //otherScriptInstance = GameObject.Find("GameMaster").GetComponent<Map>();
         //otherScriptInstance = Managers.Game.map;
         //monsterType = GameManager.instance.pool.monsterPools.Length;
-        SceneFader.isFading = false;
+        //Managers.Scene.sceneFader.isFading = false;
         Managers.Sound.Play("Bgms/old-story-from-scotland-147143", Define.Sound.Bgm);
         monsters = Resources.LoadAll<GameObject>("Prefabs/Monster");
     }

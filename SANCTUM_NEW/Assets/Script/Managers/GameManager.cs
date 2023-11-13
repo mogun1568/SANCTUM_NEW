@@ -35,8 +35,11 @@ public class GameManager
         isLive = true;
         isFPM = false;
         GameIsOver = false;
+        gameTime = 0;
         Lives = startLives;
         Rounds = 0;
+        exp = 0;
+        nextExp = 3;
         countLevelUp = 0;
     }
 
@@ -98,6 +101,10 @@ public class GameManager
     {
         while (countLevelUp > 0)
         {
+            if (Managers.UI.getPopStackTop().name == "NodeUI")
+            {
+                Managers.UI.ClosePopupUI();
+            }
             Managers.UI.ShowPopupUI<LevelUp>("LevelUpUI");
             //ShowUI.Show();
             //uiLevelUp.Show();

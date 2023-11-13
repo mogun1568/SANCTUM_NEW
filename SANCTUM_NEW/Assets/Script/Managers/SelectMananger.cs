@@ -22,13 +22,14 @@ public class SelectMananger
 
 
 
-    public void SelectNode(Node node)
+    public void SelectNode(Node node, GameObject turret)
     {
-        if (selectedNode == node)   // 선택한 노드를 또 선택하면
+        if (selectedNode == node || turret == null)   // 선택한 노드를 또 선택하거나 타워가 없는 노드를 선택하면
         {
             DeselectNode();
             return;
         }
+
         DeselectNode();
 
         selectedNode = node;

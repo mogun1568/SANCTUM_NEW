@@ -18,10 +18,17 @@ public class Node : MonoBehaviour
 
     void OnMouseDown()
     {
-        if (turret != null)
+        //if (turret != null)
+        //{
+        //    Managers.Select.SelectNode(this);
+        //}
+
+        if (Managers.Game.GameIsOver || !Managers.Game.isLive)
         {
-            Managers.Select.SelectNode(this);
+            return;
         }
+
+        Managers.Select.SelectNode(this, turret);
     }
 
     public Vector3 GetBuildPosition()

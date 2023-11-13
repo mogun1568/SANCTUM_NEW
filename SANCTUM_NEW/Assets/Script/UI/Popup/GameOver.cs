@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class GameOver : UI_Popup
 {
-    public string MainToLoad = "MainMenu";
+    //public string MainToLoad = "MainMenu";
 
     //public SceneFader sceneFader;
 
@@ -40,13 +40,13 @@ public class GameOver : UI_Popup
     {
         Managers.Sound.Play("Effects/UiClickLow", Define.Sound.Effect);
         Managers.Game.Resume();
-        Managers.Scene.sceneFader.FadeTo(SceneManager.GetActiveScene().name);
+        Managers.Scene.sceneFader.FadeTo(Define.Scene.GamePlay);
     }
 
     public void Menu()
     {
         Managers.Sound.Play("Effects/UiClickLow", Define.Sound.Effect);
         Managers.Game.Resume();
-        Managers.Scene.sceneFader.FadeTo(MainToLoad);
+        Managers.Scene.sceneFader.FadeTo(Define.Scene.MainMenu);
     }
 }

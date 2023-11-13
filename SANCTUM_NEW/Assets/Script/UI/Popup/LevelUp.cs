@@ -38,7 +38,7 @@ public class LevelUp : UI_Popup
         {
             ran[0] = Random.Range(0, items.Length); // items.Length
             ran[1] = Random.Range(0, items.Length);
-            ran[2] = Random.Range(9, items.Length);
+            ran[2] = Random.Range(0, items.Length);
 
             // 중복 검사
             if (ran[0] != ran[1] && ran[1] != ran[2] && ran[0] != ran[2])

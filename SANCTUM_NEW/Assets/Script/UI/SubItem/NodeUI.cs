@@ -122,6 +122,7 @@ public class NodeUI : UI_Popup
     {
         float curHP = towerControl._stat.HP;
         float maxHP = 100f;
+
         GetObject((int)GameObjects.HpBar).GetComponent<Slider>().value = curHP / maxHP;
 
         GetText((int)Texts.damageText).text = towerControl._stat.BulletDamage.ToString("F0");
@@ -129,6 +130,11 @@ public class NodeUI : UI_Popup
 
         sphere.localScale = new Vector3(towerControl._stat.Range * 2, sphere.localScale.y, towerControl._stat.Range * 2);
         sphere1.localScale = new Vector3(towerControl._stat.Range * 2 - 0.5f, sphere1.localScale.y, towerControl._stat.Range * 2 - 0.5f);
+
+        if (curHP <= 0)
+        {
+            target.turret = null;
+        }
     }
 
     public void FirstPersonMode()

@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class PauseMenu : UI_Popup
 {
-    string MainToLoad = "MainMenu";
+    //string MainToLoad = "MainMenu";
 
     enum Buttons
     {
@@ -33,13 +33,13 @@ public class PauseMenu : UI_Popup
     public void Retry()
     {
         Managers.Game.Toggle();
-        Managers.Scene.sceneFader.FadeTo(SceneManager.GetActiveScene().name);
+        Managers.Scene.sceneFader.FadeTo(Define.Scene.GamePlay);
     }
 
     public void Menu()
     {
         Managers.Game.Toggle();
-        Managers.Scene.sceneFader.FadeTo(MainToLoad);
+        Managers.Scene.sceneFader.FadeTo(Define.Scene.MainMenu);
     }
 
     public void Setting()

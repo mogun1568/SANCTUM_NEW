@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -21,6 +22,8 @@ public class SceneManagerEx
         Managers.Clear();
 
         SceneManager.LoadScene(GetSceneName(type));
+
+        sceneFader.Init();
     }
 
     string GetSceneName(Define.Scene type)

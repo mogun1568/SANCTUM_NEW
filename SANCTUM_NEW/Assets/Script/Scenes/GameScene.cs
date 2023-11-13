@@ -19,8 +19,10 @@ public class GameScene : BaseScene
     {
         base.Init();
 
-        SceneType = Define.Scene.Game;
+        SceneType = Define.Scene.GamePlay;
 
+        //Managers.Game.Init();
+        //Managers.Scene.Init();
         Managers.UI.ShowSceneUI<UI_Scene>("MainUI");
         Managers.UI.ShowPopupUI<UI_Inven>("InvenUI");
 
@@ -47,7 +49,7 @@ public class GameScene : BaseScene
             return;
         }
 
-        if (SceneFader.isFading)
+        if (Managers.Scene.sceneFader.isFading)
         {
             return;
         }
@@ -77,6 +79,6 @@ public class GameScene : BaseScene
 
     public override void Clear()
     {
-        
+        Managers.Game.Init();
     }
 }

@@ -7,9 +7,11 @@ public class Define
     public enum Scene
     {
         Unknown,
-        Login,
+        MainMenu,
+        GamePlay
+        /*Login,
         Lobby,
-        Game,
+        Game*/
     }
 
     public enum Sound
