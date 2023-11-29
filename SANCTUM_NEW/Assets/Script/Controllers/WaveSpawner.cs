@@ -16,7 +16,8 @@ public class WaveSpawner : MonoBehaviour
 
     public float timeBetweenWaves = 20f;
     private float countdown = 4f;
-    private bool isFirstWave = true;
+    //private bool isFirstWave = true;
+    int expandCount = 0;
 
     //public TextMeshProUGUI waveCountdownText;
 
@@ -55,17 +56,22 @@ public class WaveSpawner : MonoBehaviour
 
         if (countdown <= 0f)
         {
-            if (isFirstWave)
+            //if (isFirstWave)
+            //{
+            //    isFirstWave = false;
+            //}
+            //else
+            //{
+            if (expandCount > 1)
             {
-                isFirstWave = false;
-            }
-            else
-            {
+                expandCount = 0;
                 otherScriptInstance.expand_map();
-                waveCount = Mathf.RoundToInt(waveCount * 1.2f);
-                Mathf.Clamp(waveCount, 0, 10);
-                EnemyStat.AddHp += 20;
             }
+            expandCount++;
+            waveCount = Mathf.RoundToInt(waveCount * 1.2f);
+            Mathf.Clamp(waveCount, 0, 10);
+            EnemyStat.AddHp += 20;
+            //}
             StartCoroutine(SpawnWave());
             countdown = timeBetweenWaves;
             return;

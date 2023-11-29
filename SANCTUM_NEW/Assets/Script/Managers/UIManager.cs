@@ -35,6 +35,11 @@ public class UIManager
 
         if (sort)
         {
+            // 한 번씩 오류로 마이너스 값 임시방편
+            if (_order < 0)
+            {
+                _order = 20;
+            }
             canvas.sortingOrder = _order;
             _order++;
         } else
