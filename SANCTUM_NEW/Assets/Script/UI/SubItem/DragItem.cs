@@ -58,6 +58,11 @@ public class DragItem : UI_Base
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (SilhouetteItem == null)
+        {
+            Debug.Log("null");
+        }
+
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
         float size = Mathf.Sqrt((normal_position.x - eventData.position.x) * (normal_position.x - eventData.position.x) + (normal_position.y - eventData.position.y) * (normal_position.y - eventData.position.y));

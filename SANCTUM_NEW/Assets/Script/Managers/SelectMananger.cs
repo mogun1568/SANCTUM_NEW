@@ -20,8 +20,6 @@ public class SelectMananger
 
     // node 선택 함수
 
-
-
     public void SelectNode(Node node, GameObject turret)
     {
         if (selectedNode == node || turret == null)   // 선택한 노드를 또 선택하거나 타워가 없는 노드를 선택하면
@@ -44,8 +42,7 @@ public class SelectMananger
     {
         selectedNode = null;
         // 원래는 nodeUI 스크립트에서 했는데 nodeUI가 클로즈되고 levelUp 프리팹이 나와야 하는데 실행 순서가 반대여서 여기로 옮김
-        Debug.Log(Managers.UI.getPopStackTop().name);
-        if (Managers.UI.getPopStackTop().name == "NodeUI")
+        if (Managers.UI.getPopStackTop()?.name == "NodeUI")
         {
             Managers.UI.ClosePopupUI();
         }
@@ -67,7 +64,7 @@ public class SelectMananger
         Debug.Log($"{itemData.itemName} Selected");
         itemUI = item;
 
-        if (Managers.UI.getPopStackTop().name == "NodeUI")
+        if (Managers.UI.getPopStackTop()?.name == "NodeUI")
         {
             DeselectNode();
         }

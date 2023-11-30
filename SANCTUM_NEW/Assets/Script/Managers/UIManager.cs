@@ -130,7 +130,15 @@ public class UIManager
 
     public GameObject getPopStackTop()
     {
-        return _popupStack.Peek().gameObject;
+        if (_popupStack.Count > 0)
+        {
+            return _popupStack.Peek().gameObject;
+        }
+        else
+        {
+            // 스택이 비어있을 때의 처리 코드 추가
+            return null; // 이 함수를 사용할 때 null연산자를 이용해 넘어가게 하기 위함
+        }
     }
 
     public void CloseAllPopupUI()

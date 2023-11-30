@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class UI_Inven : UI_Popup
+public class UI_Inven : UI_Scene
 {
     void Awake()
     {

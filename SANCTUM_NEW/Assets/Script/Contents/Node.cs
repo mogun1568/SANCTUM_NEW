@@ -197,7 +197,7 @@ public class Node : MonoBehaviour
         // 비활성화된 오브젝트는 그냥 GetComponent로 못찾음 GetComponents<>(true)로 배열로 찾아서 사용해야 함
         turret.GetComponentsInChildren<Camera>(true)[0].gameObject.SetActive(true);
 
-        Managers.UI.ClosePopupUI();
+        Managers.Game.invenUI.SetActive(false);
         Managers.UI.ShowPopupUI<FPSUI>("FPSModeUI");
     }
 

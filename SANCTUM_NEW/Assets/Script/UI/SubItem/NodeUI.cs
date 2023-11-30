@@ -63,7 +63,10 @@ public class NodeUI : UI_Popup
     {
         if (target.turret == null)
         {
-            Managers.UI.ClosePopupUI();
+            if (Managers.UI.getPopStackTop()?.name == "NodeUI")
+            {
+                Managers.UI.ClosePopupUI();
+            }
         }
 
         RectTransform uiElementRectTransform = GetComponentInChildren<RectTransform>();  // UI 요소의 RectTransform 컴포넌트 가져오기

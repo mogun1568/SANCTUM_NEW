@@ -174,7 +174,8 @@ public class EnemyMovement : MonoBehaviour
     void EndPath()
     {
         Managers.Sound.Play("Effects/Hit3", Define.Sound.Effect);
-        Managers.Game.Lives--;
+        int lifeLost = (int)gameObject.GetComponent<EnemyStat>().LifeLost;
+        Managers.Game.Lives -= lifeLost;
         //WaveSpawner.EnemiesAlive--;
         Managers.Resource.Destroy(gameObject);
     }

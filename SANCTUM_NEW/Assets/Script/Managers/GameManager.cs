@@ -22,6 +22,8 @@ public class GameManager
     public int countLevelUp;
     [HideInInspector] public bool isHide;
 
+    public GameObject invenUI;
+
     //[Header("# Game Object")]
     //public PoolManager pool;
     //public Map map;
@@ -101,7 +103,7 @@ public class GameManager
     {
         while (countLevelUp > 0)
         {
-            if (Managers.UI.getPopStackTop().name == "NodeUI")
+            if (Managers.UI.getPopStackTop()?.name == "NodeUI")
             {
                 Managers.UI.ClosePopupUI();
             }

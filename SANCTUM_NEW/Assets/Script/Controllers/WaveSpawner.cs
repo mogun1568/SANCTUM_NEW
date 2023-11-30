@@ -18,6 +18,7 @@ public class WaveSpawner : MonoBehaviour
     private float countdown = 4f;
     //private bool isFirstWave = true;
     int expandCount = 0;
+    int bossNum = 1;
 
     //public TextMeshProUGUI waveCountdownText;
 
@@ -65,12 +66,13 @@ public class WaveSpawner : MonoBehaviour
             if (expandCount > 1)
             {
                 expandCount = 0;
+                EnemyStat.AddHp += 20;
+                waveCount = Mathf.RoundToInt(waveCount * 1.1f);
+                Mathf.Clamp(waveCount, 0, 10);
                 otherScriptInstance.expand_map();
             }
             expandCount++;
-            waveCount = Mathf.RoundToInt(waveCount * 1.2f);
-            Mathf.Clamp(waveCount, 0, 10);
-            EnemyStat.AddHp += 20;
+            
             //}
             StartCoroutine(SpawnWave());
             countdown = timeBetweenWaves;
@@ -85,7 +87,7 @@ public class WaveSpawner : MonoBehaviour
         if (Managers.Game.gameTime >= bossTime)
         {
             Debug.Log("spawnBoss");
-            GetComponent<WaveSpawner>().SpawnBossEnemy();
+            StartCoroutine(BossSpawnWave());
             bossTime *= 2f;
         }
     }
@@ -120,6 +122,23 @@ public class WaveSpawner : MonoBehaviour
         //}
     }
 
+    IEnumerator BossSpawnWave()
+    {
+        for (int i = 0; i < bossNum; i++)
+        {
+            SpawnBossEnemy();
+            yield return new WaitForSeconds(0.5f);
+        }
+        if (bossNum < 2)
+        {
+            bossNum++;
+        }
+        else
+        {
+            EnemyStat.BossAddHp += 100;
+        }
+    }
+
     void SpawnEnemy()
     {
         // 몬스터 원점이 발임
@@ -133,7 +152,7 @@ public class WaveSpawner : MonoBehaviour
         //EnemiesAlive++;
     }
 
-    public void SpawnBossEnemy()
+    void SpawnBossEnemy()
     {
         Debug.Log("spawnBoss");
         Managers.Sound.Play("Bgms/battle-of-the-dragons-8037", Define.Sound.Bgm);

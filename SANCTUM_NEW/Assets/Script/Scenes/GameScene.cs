@@ -24,7 +24,12 @@ public class GameScene : BaseScene
         //Managers.Game.Init();
         //Managers.Scene.Init();
         Managers.UI.ShowSceneUI<UI_Scene>("MainUI");
-        Managers.UI.ShowPopupUI<UI_Inven>("InvenUI");
+        GameObject invenUI = Managers.UI.ShowSceneUI<UI_Inven>("InvenUI").gameObject;
+        Managers.Game.invenUI = invenUI;
+
+        //Managers.UI.getPopStackTop().GetComponentInChildren<SelectItem>().FirstAddItem();
+        //GameObject.Find("InvenUI").GetComponentInChildren<SelectItem>().FirstAddItem();
+
 
         //Managers.UI.ShowSceneUI<UI_Inven>();
 
@@ -54,7 +59,7 @@ public class GameScene : BaseScene
             return;
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.Escape)) // Input.GetKeyDown(KeyCode.P)
         {
             Managers.Game.Toggle();
         }
@@ -72,6 +77,11 @@ public class GameScene : BaseScene
         if (Managers.Game.countLevelUp > 0 && !Managers.Game.isFPM)
         {
             StartCoroutine(Managers.Game.WaitForItemSelection());
+        }
+
+        if (!Managers.Game.isFPM && Managers.UI.getPopStackTop()?.name == "FPSUI")
+        {
+            Managers.UI.ClosePopupUI();
         }
 
         Managers.Game.gameTime += Time.deltaTime;

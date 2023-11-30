@@ -54,5 +54,19 @@ public class DeveloperMode : MonoBehaviour
             //GameManager.instance.soundManager.Play("Effects/Hit3", SoundManager.Sound.Effect);
             Managers.Game.Lives--;
         }
+
+        // 게임 재시작(esc창이 안뜰 경우 대비)
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            Debug.Log("g");
+            Managers.Scene.sceneFader.FadeTo(Define.Scene.GamePlay);
+        }
+
+        // 메인화면 이동(esc창이 안뜰 경우 대비)
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            Debug.Log("h");
+            Managers.Scene.sceneFader.FadeTo(Define.Scene.MainMenu);
+        }
     }
 }
