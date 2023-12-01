@@ -74,15 +74,18 @@ public class GameScene : BaseScene
             Managers.Game.EndGame();
         }
 
+        /*if (!Managers.Game.isFPM && Managers.UI.getPopStackTop()?.name == "FPSModeUI")
+        {
+            Managers.UI.ClosePopupUI();
+            Debug.Log(Managers.Game.countLevelUp);
+        }*/
+
         if (Managers.Game.countLevelUp > 0 && !Managers.Game.isFPM)
         {
             StartCoroutine(Managers.Game.WaitForItemSelection());
         }
-
-        if (!Managers.Game.isFPM && Managers.UI.getPopStackTop()?.name == "FPSUI")
-        {
-            Managers.UI.ClosePopupUI();
-        }
+         
+        
 
         Managers.Game.gameTime += Time.deltaTime;
     }

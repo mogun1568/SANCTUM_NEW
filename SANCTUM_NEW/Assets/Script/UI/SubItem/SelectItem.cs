@@ -67,7 +67,7 @@ public class SelectItem : UI_Base
         }
 
         // 실제 인벤토리 정보를 참고해서
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 5; i++)
         {
             AddItem("StandardTower");
 

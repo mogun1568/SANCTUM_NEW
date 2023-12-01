@@ -35,8 +35,8 @@ public class FirstPersonCamera : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E))
         {
             // 코루틴을 다른 스크립트에서 쓸때도 StartCoroutine() 써줘야 함
-            StartCoroutine(Managers.Game.WaitForItemSelection());
             ExitFirstPersonMode();
+            StartCoroutine(Managers.Game.WaitForItemSelection());
         }
 
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivitiy * Time.deltaTime;
@@ -76,8 +76,14 @@ public class FirstPersonCamera : MonoBehaviour
 
     public void ExitFirstPersonMode()
     {
-        Managers.Game.isFPM = false;
         towerControl.isFPM = false;
+
+        /* (Managers.UI.getPopStackTop().name == "FPSUI")
+        {
+            return;
+        }*/
+
+        Managers.Game.isFPM = false;
 
         Managers.UI.ClosePopupUI();
         Managers.Game.invenUI.SetActive(true);
