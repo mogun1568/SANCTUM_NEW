@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public MonsterData monster;
+    /*public MonsterData monster;
 
     string towerTag = "Tower";
 
@@ -124,7 +124,7 @@ public class Enemy : MonoBehaviour
 
     public void AttackTower()
     {
-        target.GetComponent<Turret>().TakeDamage(monster.damage);
+        //target.GetComponent<Turret>().TakeDamage(monster.damage);
         gunParticle.Play();
     }
 
@@ -231,5 +231,5 @@ public class Enemy : MonoBehaviour
     {
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, 5);
-    }
+    }*/
 }

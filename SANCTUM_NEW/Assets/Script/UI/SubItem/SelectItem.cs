@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 using Unity.VisualScripting;
-// using UnityEditor.UIElements;
+using System.Xml;
 
 public class SelectItem : UI_Base
 {
@@ -25,11 +25,12 @@ public class SelectItem : UI_Base
         Fire,
         Ice,
         Water,
-        Lighting,
+        Lightning,
         Dirt,
         DamageUp,
         RangeUp,
-        FireRateUp
+        FireRateUp,
+        LifeRecovery
     }
 
     enum Texts
@@ -38,7 +39,7 @@ public class SelectItem : UI_Base
         FireCountText,
         IceCountText,
         WaterCountText,
-        LightingCountText,
+        LightningCountText,
         DirtCountText,
         DamageUpCountText,
         RangeUpCountText,
@@ -53,6 +54,8 @@ public class SelectItem : UI_Base
 
     public override void Init()
     {
+        Managers.UI.SelectItem = GetComponent<SelectItem>();
+
         Bind<GameObject>(typeof(GameObjects));
         Bind<TextMeshProUGUI>(typeof(Texts));
 
@@ -64,7 +67,7 @@ public class SelectItem : UI_Base
         }
 
         // 실제 인벤토리 정보를 참고해서
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 5; i++)
         {
             AddItem("StandardTower");
 
@@ -77,6 +80,18 @@ public class SelectItem : UI_Base
         tok = 1;
     }
 
+    public void FirstAddItem()
+    {
+        // 실제 인벤토리 정보를 참고해서
+        for (int i = 0; i < 3; i++)
+        {
+            AddItem("StandardTower");
+
+            //GameObject item = Managers.UI.MakeSubItem<UI_Inven_Item>(inventory.transform).gameObject;
+            //UI_Inven_Item invenItem = item.GetOrAddComponent<UI_Inven_Item>();
+            //invenItem.SetInfo($"Sword{i}");
+        }
+    }
     public void AddItem(string itemName)
     {
         if (invenDict.ContainsKey(itemName))
@@ -132,6 +147,10 @@ public class SelectItem : UI_Base
 
         if (Enum.TryParse(itemName, out GameObjects enumValue))
         {
+            if (GetObject((int)enumValue) == null)
+            {
+                Debug.Log("null");
+            }
             Transform itemUI = GetObject((int)enumValue).transform;
             itemUI.SetAsLastSibling();
             itemUI.gameObject.SetActive(true);
@@ -186,8 +205,6 @@ public class SelectItem : UI_Base
             {
                 StartCoroutine(StartLerpDown());
             }
-
         }
-
     }
 }

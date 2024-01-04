@@ -6,7 +6,7 @@ using TMPro;
 
 public class HUD : MonoBehaviour
 {
-    public enum InfoType { Time, Live, Exp }
+    public enum InfoType { Time, Live, Exp, Round }
     public InfoType type;
 
     Slider mySlider;
@@ -20,7 +20,7 @@ public class HUD : MonoBehaviour
 
     void LateUpdate()
     {
-        if (!GameManager.instance.isLive)
+        if (!Managers.Game.isLive)
         {
             return;
         }
@@ -28,19 +28,23 @@ public class HUD : MonoBehaviour
         switch (type)
         {
             case InfoType.Time:
-                float gameTime = GameManager.instance.gameTime;
+                float gameTime = Managers.Game.gameTime;
                 int min = Mathf.FloorToInt(gameTime / 60);
                 int sec = Mathf.FloorToInt(gameTime % 60);
                 myText.text = string.Format("{0:D2}:{1:D2}", min, sec);
                 break;
             case InfoType.Live:
-                int live = GameManager.instance.Lives;
+                int live = Managers.Game.Lives;
                 myText.text = live.ToString();
                 break;
             case InfoType.Exp:
-                float curExp = GameManager.instance.exp;
-                float maxExp = GameManager.instance.nextExp;
+                float curExp = Managers.Game.exp;
+                float maxExp = Managers.Game.nextExp;
                 mySlider.value = curExp / maxExp;
+                break;
+            case InfoType.Round:
+                int RoundCount = Managers.Game.Rounds;
+                myText.text = RoundCount.ToString();
                 break;
 
         }

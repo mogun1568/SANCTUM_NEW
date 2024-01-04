@@ -2,38 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelUp : MonoBehaviour
+public class LevelUp : UI_Popup
 {
     RectTransform rect;
     Item[] items;
 
     void Awake()
     {
+        base.Init();
+
         rect = GetComponent<RectTransform>();
         items = GetComponentsInChildren<Item>(true);
+
+        Show();
     }
 
     public void Show()
     {
         Next();
-        GameManager.instance.Stop();
-        rect.localScale = Vector3.one;
+        Managers.Game.Stop();
         Managers.Sound.Play("Effects/LevelUpLong", Define.Sound.Effect);
-        //GameManager.instance.soundManager.Play("Effects/LevelUpLong", SoundManager.Sound.Effect);
     }
-
-    public void Hide()
-    {
-        GameManager.instance.Resume();
-        //Time.timeScale = 1f;
-        rect.localScale = Vector3.zero;
-        GameManager.instance.isHide = true;
-    }
-
-    //public void Select(int index)
-    //{
-    //    items[index].Onclick();
-    //}
 
     void Next()
     {

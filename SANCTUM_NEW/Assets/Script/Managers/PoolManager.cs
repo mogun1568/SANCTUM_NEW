@@ -18,15 +18,17 @@ public class PoolManager
             Root = new GameObject().transform;
             Root.name = $"{original.name}_Root";
 
+            // pool root가 없는 pool이 생성될 때 root를 만들고 count만큼 넣어둔 후 pop하는 방식
             for (int i = 0; i < count; i++)
             {
-                Push(Create());
+                // Create부분 애매함
+                Push(Create(default, default, null));
             }
         }
 
-        Poolable Create()
+        Poolable Create(Vector3 position, Quaternion rotation, Transform parent)
         {
-            GameObject go = Object.Instantiate<GameObject>(Original);
+            GameObject go = Object.Instantiate<GameObject>(Original, position, rotation, parent);
             go.name = Original.name;
             return go.GetOrAddComponent<Poolable>();
         }
@@ -45,7 +47,7 @@ public class PoolManager
             _poolStack.Push(poolable);
         }
 
-        public Poolable Pop(Transform parent)
+        public Poolable Pop(Vector3 position, Quaternion rotation, Transform parent)
         {
             Poolable poolable;
 
@@ -55,9 +57,10 @@ public class PoolManager
             }
             else
             {
-                poolable = Create();
+                poolable = Create(position, rotation, parent);
             }
 
+            poolable.gameObject.transform.SetPositionAndRotation(position, rotation);
             poolable.gameObject.SetActive(true);
 
             // DontDestroyOnLoad 해제 용도
@@ -82,7 +85,7 @@ public class PoolManager
     {
         if (_root == null)
         {
-            _root = new GameObject { name = "@Pool_Root" }.transform;
+            _root = new GameObject { name = "@DisablePool_Root" }.transform;
             Object.DontDestroyOnLoad(_root);
         }
     }
@@ -109,14 +112,14 @@ public class PoolManager
         _pool[name].Push(poolable);
     }
 
-    public Poolable Pop(GameObject original, Transform parent = null)
+    public Poolable Pop(GameObject original, Vector3 position = default, Quaternion rotation = default, Transform parent = null)
     {
         if (_pool.ContainsKey(original.name) == false)
         {
             CreatePool(original);
         }
 
-        return _pool[original.name].Pop(parent);
+        return _pool[original.name].Pop(position, rotation, parent);
     }
 
     public GameObject GetOriginal(string name)

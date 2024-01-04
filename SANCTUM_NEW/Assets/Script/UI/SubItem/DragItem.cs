@@ -11,9 +11,7 @@ public class DragItem : UI_Base
 
     GameObject SilhouetteItem;
 
-    Map map;
-    BuildManager buildManager;
-    public ItemData data;
+    //Map map;
     Data.Item itemData;
 
     private RaycastHit hit;
@@ -29,28 +27,42 @@ public class DragItem : UI_Base
 
     public override void Init()
     {
-        //Debug.Log(gameObject.name);
         itemData = Managers.Data.ItemDict[gameObject.name];
         icon = GetComponentsInChildren<Image>()[6];
         icon.sprite = Managers.Resource.Load<Sprite>($"Icon/{itemData.itemIcon}");
 
-        BindEvent(gameObject, (PointerEventData data) => { OnBeginDrag(data); }, Define.UIEvent.BeginDrag);
-        BindEvent(gameObject, (PointerEventData data) => { OnDrag(data); }, Define.UIEvent.Drag);
-        BindEvent(gameObject, (PointerEventData data) => { OnEndDrag(data); }, Define.UIEvent.EndDrag);
+        if (itemData.itemType != "WorldOnlyItem") {
+            BindEvent(gameObject, (PointerEventData data) => { OnBeginDrag(); }, Define.UIEvent.BeginDrag);
+            BindEvent(gameObject, (PointerEventData data) => { OnDrag(data); }, Define.UIEvent.Drag);
+            BindEvent(gameObject, (PointerEventData data) => { OnEndDrag(); }, Define.UIEvent.EndDrag);
+        } else
+        {
+            BindEvent(gameObject, (PointerEventData data) => { Onclick(); }, Define.UIEvent.Click);
+        }
     }
 
-    public void OnBeginDrag(PointerEventData eventData)
+    public void OnBeginDrag()
     {
         normal_position = transform.position;
         normal_size = transform.localScale;
         Managers.Select.SelectItemToUse(gameObject, itemData);
-        //buildManager.SelectItemToUse(gameObject, data);
-        SilhouetteItem = Managers.Resource.Instantiate("ItemE_Tower");
+        if (itemData.itemType == "Tower")
+        {
+            SilhouetteItem = Managers.Resource.Instantiate("ItemE_Tower");
+        } else
+        {
+            SilhouetteItem = Managers.Resource.Instantiate("Cube");
+        }
         //SilhouetteItem = Instantiate(TempItemObject, hit.point, Quaternion.identity);
     }
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (SilhouetteItem == null)
+        {
+            Debug.Log("null");
+        }
+
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
         float size = Mathf.Sqrt((normal_position.x - eventData.position.x) * (normal_position.x - eventData.position.x) + (normal_position.y - eventData.position.y) * (normal_position.y - eventData.position.y));
@@ -70,11 +82,9 @@ public class DragItem : UI_Base
 
         //Move
         Physics.Raycast(ray, out hit);
-        if (hit.transform.name == "ForestGround01(Clone)")
+        if (hit.transform.name == "ForestGround01")
         {
-            //Debug.Log("OnNode");
-
-            if (data.itemId == 0)
+            if (itemData.itemType == "Tower")
             {
                 if ((hit.transform.GetComponent<Node>().turret != null || !hit.transform.GetComponent<Node>().turret) && !hit.transform.GetComponent<Node>().enviroment)
                 {
@@ -97,7 +107,7 @@ public class DragItem : UI_Base
         }
         else if (hit.transform.name == "Plane")
         {
-            if (data.itemId == 0)
+            if (itemData.itemType == "Tower")
             {
                 foreach (Renderer mat in SilhouetteItem.GetComponentsInChildren<Renderer>())
                     mat.material.SetColor("_Color", new Color(1, 1, 1));
@@ -106,7 +116,7 @@ public class DragItem : UI_Base
         }
         else
         {
-            if (data.itemId == 0)
+            if (itemData.itemType == "Tower")
             {
                 foreach (Renderer mat in SilhouetteItem.GetComponentsInChildren<Renderer>())
                     mat.material.color = new Color(1, 0.01f, 0, 0);
@@ -115,11 +125,11 @@ public class DragItem : UI_Base
         }
     }
 
-    public void OnEndDrag(PointerEventData eventData)
+    public void OnEndDrag()
     {
         transform.position = normal_position;
         transform.localScale = normal_size;
-        if (hit.transform.name == "ForestGround01(Clone)")
+        if (hit.transform.name == "ForestGround01")
         {
             if ((hit.transform.GetComponent<Node>().turret != null || !hit.transform.GetComponent<Node>().turret))
             {
@@ -127,29 +137,23 @@ public class DragItem : UI_Base
             }
         }
         Managers.Select.Clear();
-        //buildManager.Clear();
         Destroy(SilhouetteItem);
         SilhouetteItem = null;
     }
 
     public void Onclick()
     {
-        //Debug.Log($"{data.itemName} Selected");
-
-        if (data.itemType == ItemData.ItemType.WorldOnlyItem)
+        if (itemData.itemType == "WorldOnlyItem")
         {
             Managers.Sound.Play("Effects/userLife", Define.Sound.Effect);
-            //GameManager.instance.soundManager.Play("Effects/userLife", SoundManager.Sound.Effect);
             Managers.Select.SelectItemToUse(gameObject, itemData);
-            //buildManager.SelectItemToUse(gameObject, data);
-            GameManager.instance.Lives++;
+            Managers.Game.Lives++;
             Managers.Select.DestroyItemUI();
-            //buildManager.DestroyItemUI();
         }
     }
 
-    void Start()
-    {
-        map = GameObject.Find("GameMaster").GetComponent<Map>();
-    }
+    //void Start()
+    //{
+    //    map = GameObject.Find("GameMaster").GetComponent<Map>();
+    //}
 }

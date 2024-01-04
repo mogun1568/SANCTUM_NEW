@@ -9,7 +9,7 @@ public class LoginScene : BaseScene
     {
         base.Init();
 
-        SceneType = Define.Scene.Login;
+        SceneType = Define.Scene.MainMenu;
 
         /*List<GameObject> list = new List<GameObject>();
         for (int i = 0; i < 5; i++)
@@ -23,13 +23,13 @@ public class LoginScene : BaseScene
         }*/
     }
 
-    private void Update()
+    /*private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
             Managers.Scene.LoadScene(Define.Scene.Game);
         }
-    }
+    }*/
 
     public override void Clear()
     {

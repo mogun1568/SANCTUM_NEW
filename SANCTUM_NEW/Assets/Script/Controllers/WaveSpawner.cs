@@ -9,39 +9,45 @@ public class WaveSpawner : MonoBehaviour
     //public static int EnemiesAlive;
 
     //public GameObject[] monsters;
-    public Wave[] waves;
+    //public Wave[] waves;
     int waveCount = 5;
 
-    public Transform spawnPoint;    // 스폰할 위치
+    //public Transform spawnPoint;    // 스폰할 위치
 
     public float timeBetweenWaves = 20f;
     private float countdown = 4f;
-    private bool isFirstWave = true;
+    //private bool isFirstWave = true;
+    int expandCount = 0;
+    int bossNum = 1;
 
     //public TextMeshProUGUI waveCountdownText;
 
     //private int waveIndex = 0;
 
-    private Map otherScriptInstance;
+    [SerializeField] NewMap map;
 
     //int monsterType;
 
     float bossTime = 60f;
 
+    GameObject[] monsters;
+
     void Start()
     {
         //EnemiesAlive = 0;
         //otherScriptInstance = GameObject.Find("GameMaster").GetComponent<Map>();
-        otherScriptInstance = GameManager.instance.map;
+        //otherScriptInstance = Managers.Game.map;
         //monsterType = GameManager.instance.pool.monsterPools.Length;
-        SceneFader.isFading = false;
+        //Managers.Scene.sceneFader.isFading = false;
         Managers.Sound.Play("Bgms/old-story-from-scotland-147143", Define.Sound.Bgm);
-        //GameManager.instance.soundManager.Play("Bgms/old-story-from-scotland-147143", SoundManager.Sound.Bgm);
+        monsters = Resources.LoadAll<GameObject>("Prefabs/Monster");
+
+
     }
 
     void Update()
     {
-        if (!GameManager.instance.isLive)
+        if (!Managers.Game.isLive)
         {
             return;
         }
@@ -53,17 +59,23 @@ public class WaveSpawner : MonoBehaviour
 
         if (countdown <= 0f)
         {
-            if (isFirstWave)
+            //if (isFirstWave)
+            //{
+            //    isFirstWave = false;
+            //}
+            //else
+            //{
+            if (expandCount > 1)
             {
-                isFirstWave = false;
-            }
-            else
-            {
-                otherScriptInstance.expand_map();
-                waveCount = Mathf.RoundToInt(waveCount * 1.2f);
+                expandCount = 0;
+                EnemyStat.AddHp += 20;
+                waveCount = Mathf.RoundToInt(waveCount * 1.1f);
                 Mathf.Clamp(waveCount, 0, 10);
-                Enemy.addHealth += 20;
+                map.ExpendMap();
             }
+            expandCount++;
+            
+            //}
             StartCoroutine(SpawnWave());
             countdown = timeBetweenWaves;
             return;
@@ -74,20 +86,17 @@ public class WaveSpawner : MonoBehaviour
         countdown = Mathf.Clamp(countdown, 0f, Mathf.Infinity);
 
         // 1분에 한번 출현
-        if (GameManager.instance.gameTime >= bossTime)
+        if (Managers.Game.gameTime >= bossTime)
         {
             Debug.Log("spawnBoss");
-            GetComponent<WaveSpawner>().SpawnBossEnemy();
+            StartCoroutine(BossSpawnWave());
             bossTime *= 2f;
         }
-
-        //waveCountdownText.text = string.Format("{0:00.00}", countdown);
     }
 
     IEnumerator SpawnWave()
     {
-        GameManager.instance.Rounds++;
-
+        Managers.Game.Rounds++;
 
         yield return new WaitForSeconds(6f);
         for (int i = 0; i < waveCount; i++)
@@ -115,23 +124,41 @@ public class WaveSpawner : MonoBehaviour
         //}
     }
 
+    IEnumerator BossSpawnWave()
+    {
+        for (int i = 0; i < bossNum; i++)
+        {
+            SpawnBossEnemy();
+            yield return new WaitForSeconds(0.5f);
+        }
+        if (bossNum < 2)
+        {
+            bossNum++;
+        }
+        else
+        {
+            EnemyStat.BossAddHp += 100;
+        }
+    }
+
     void SpawnEnemy()
     {
         // 몬스터 원점이 발임
-        GameObject monster = Managers.Resource.Instantiate("Monster/AlienDefault");
-        monster.transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
-        //GameManager.instance.pool.GetMonster(Random.Range(0, monsterType - 1), spawnPoint.position, spawnPoint.rotation); //  * Quaternion.Euler(0f, 180f, 0f)
-        //Instantiate(enemy, spawnPoint.position - Vector3.up * 1.5f, spawnPoint.rotation);
+        int idx = Random.Range(0, monsters.Length);
+        while (monsters[idx].name == "SalarymanDefault")
+        {
+            idx = Random.Range(0, monsters.Length);
+        }
+        Debug.Log(monsters[Random.Range(0, monsters.Length)].name);
+        GameObject monster = Managers.Resource.Instantiate($"Monster/{monsters[idx].name}", map.startObj.transform.position, map.startObj.transform.rotation);
         //EnemiesAlive++;
     }
 
-    public void SpawnBossEnemy()
+    void SpawnBossEnemy()
     {
-        //Debug.Log("spawnBoss");
+        Debug.Log("spawnBoss");
         Managers.Sound.Play("Bgms/battle-of-the-dragons-8037", Define.Sound.Bgm);
-        //GameManager.instance.soundManager.Play("Bgms/battle-of-the-dragons-8037", SoundManager.Sound.Bgm);
-        // 이거 새로운 pool 방식으로 고쳐야 됨
-        //GameManager.instance.pool.GetMonster(monsterType - 1, spawnPoint.position, spawnPoint.rotation);
+        GameObject monster = Managers.Resource.Instantiate("Monster/SalarymanDefault", map.startObj.transform.position, map.startObj.transform.rotation);
     }
 }
 

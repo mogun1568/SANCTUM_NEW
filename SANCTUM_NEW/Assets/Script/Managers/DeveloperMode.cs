@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class DeveloperMode : MonoBehaviour
 {
+    [SerializeField] NewMap map;
+
     void Start()
     {
         
@@ -15,25 +17,24 @@ public class DeveloperMode : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.A))
         {
             Debug.Log("a");
-            //int remainExp = GameManager.instance.nextExp - GameManager.instance.exp;
-            //for (int i = 0; i < remainExp; i++)
-            //{
-            //    GameManager.instance.GetExp();
-            //}
-            GameManager.instance.uiLevelUp.Show();
+            Debug.Log(Managers.Game.nextExp);
+            Debug.Log(Managers.Game.exp);
+            int remainExp = Managers.Game.nextExp - Managers.Game.exp;
+            Managers.Game.GetExp(remainExp);
+            //Managers.UI.ShowPopupUI<LevelUp>("LevelUpUI");
         }
 
         // 정지
         if (Input.GetKeyDown(KeyCode.S))
         {
             Debug.Log("s");
-            if (GameManager.instance.isLive)
+            if (Managers.Game.isLive)
             {
-                GameManager.instance.Stop();
+                Managers.Game.Stop();
             }
             else
             {
-                GameManager.instance.Resume();
+                Managers.Game.Resume();
             }
 
         }
@@ -42,7 +43,7 @@ public class DeveloperMode : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.D))
         {
             Debug.Log("d");
-            GameManager.instance.map.expand_map();
+            map.ExpendMap();
         }
 
         // 라이프 조절
@@ -51,7 +52,21 @@ public class DeveloperMode : MonoBehaviour
             Debug.Log("f");
             Managers.Sound.Play("Effects/Hit3", Define.Sound.Effect);
             //GameManager.instance.soundManager.Play("Effects/Hit3", SoundManager.Sound.Effect);
-            GameManager.instance.Lives--;
+            Managers.Game.Lives--;
+        }
+
+        // 게임 재시작(esc창이 안뜰 경우 대비)
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            Debug.Log("g");
+            Managers.Scene.sceneFader.FadeTo(Define.Scene.GamePlay);
+        }
+
+        // 메인화면 이동(esc창이 안뜰 경우 대비)
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            Debug.Log("h");
+            Managers.Scene.sceneFader.FadeTo(Define.Scene.MainMenu);
         }
     }
 }

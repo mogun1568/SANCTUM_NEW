@@ -13,9 +13,6 @@ public class Bullet : MonoBehaviour
     [HideInInspector] public float damage;
     [HideInInspector] public float explosionRadius = 8f;
 
-    //public bool isDot;
-    public GameObject imapctEffect;
-
     // 1인칭 모드 변수
     [HideInInspector] public bool isFPM;
     [HideInInspector] public Vector3 firePoint; // 초기 생성 위치
@@ -29,13 +26,20 @@ public class Bullet : MonoBehaviour
 
     void OnEnable()
     {
+        gameObject.GetOrAddComponent<Poolable>();
+
         gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
         distanceFromTower = 0f;
+
+        if (type == InfoType.General)
+        {
+            transform.GetChild(0).gameObject.SetActive(true);
+        }
     }
 
     void Update()
     {
-        if (!GameManager.instance.isLive)
+        if (!Managers.Game.isLive)
         {
             return;
         }
@@ -46,7 +50,6 @@ public class Bullet : MonoBehaviour
             if (distanceFromTower >= range)
             {
                 Managers.Resource.Destroy(gameObject);
-                //gameObject.SetActive(false);
             }
             return;
         }
@@ -54,7 +57,6 @@ public class Bullet : MonoBehaviour
         if (target == null)
         {
             Managers.Resource.Destroy(gameObject);
-            //gameObject.SetActive(false);
             return;
         }
 
@@ -80,36 +82,20 @@ public class Bullet : MonoBehaviour
 
         if (other.CompareTag("Enemy"))
         {
-            //Debug.Log("hit");
             target = other.gameObject.transform;
             HitTarget();
         }
         else
         {
             Managers.Resource.Destroy(gameObject);
-            //gameObject.SetActive(false);
         }
 
     }
 
     void HitTarget()
     {
-        GameObject effectIns = (GameObject)Instantiate(imapctEffect, transform.position, transform.rotation);
-        Destroy(effectIns, 5f);
-
-        // explosionRadius라는 범위 안에 있으면
-        //if (explosionRadius > 0f)
-        //{
-        //    ExplodeDamage();
-        //}
-        //else if (isDot)
-        //{
-        //    DotDamage(target);
-        //}
-        //else
-        //{
-        //    Damage(target);
-        //}
+        GameObject effectIns = Managers.Resource.Instantiate("BulletImpactEffect", transform.position, transform.rotation);
+        StartCoroutine(DestroyEffect(effectIns));
 
         switch (type)
         {
@@ -131,7 +117,13 @@ public class Bullet : MonoBehaviour
         }
 
         Managers.Resource.Destroy(gameObject);
-        //gameObject.SetActive(false);
+    }
+
+    IEnumerator DestroyEffect(GameObject effect)
+    {
+        yield return new WaitForSeconds(5f);
+
+        Managers.Resource.Destroy(effect);
     }
 
     // 광범위 타격
@@ -150,7 +142,7 @@ public class Bullet : MonoBehaviour
     // 데미지 (지금은 한대맞으면 바로 죽음)
     void Damage(Transform enemy)
     {
-        Enemy e = enemy.GetComponent<Enemy>();
+        EnemyControl e = enemy.GetComponent<EnemyControl>();
 
         if (e != null)
         {
@@ -161,7 +153,7 @@ public class Bullet : MonoBehaviour
     // 도트 데이지 코드
     void DotDamage(Transform enemy)
     {
-        Enemy e = enemy.GetComponent<Enemy>();
+        EnemyControl e = enemy.GetComponent<EnemyControl>();
 
         if (e != null)
         {
@@ -171,7 +163,7 @@ public class Bullet : MonoBehaviour
 
     void SlowSpeed(Transform enemy)
     {
-        Enemy e = enemy.GetComponent<Enemy>();
+        EnemyControl e = enemy.GetComponent<EnemyControl>();
 
         if (e != null)
         {
@@ -181,7 +173,7 @@ public class Bullet : MonoBehaviour
 
     void MassiveDamage(Transform enemy)
     {
-        Enemy e = enemy.GetComponent<Enemy>();
+        EnemyControl e = enemy.GetComponent<EnemyControl>();
 
         if (e != null)
         {

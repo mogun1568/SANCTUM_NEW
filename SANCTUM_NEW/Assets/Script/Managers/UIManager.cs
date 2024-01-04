@@ -9,6 +9,9 @@ public class UIManager
     Stack<UI_Popup> _popupStack = new Stack<UI_Popup>();
     UI_Scene _sceneUI = null;
 
+    SelectItem _selectItem;
+    public SelectItem SelectItem { get { return _selectItem; } set { _selectItem = value; } }
+
     public GameObject Root
     {
         get
@@ -26,16 +29,22 @@ public class UIManager
     {
         Canvas canvas = Util.GetOrAddComponent<Canvas>(go);
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        // 근데 캔버스에 이거 있는 것도 있고 없는 것도 있는데 뭐냐
         // canvas안에 canvas가 있어도 자기자신의 order를 가짐
         canvas.overrideSorting = true;
 
         if (sort)
         {
+            // 한 번씩 오류로 마이너스 값 임시방편
+            if (_order < 0)
+            {
+                _order = 20;
+            }
             canvas.sortingOrder = _order;
             _order++;
         } else
         {
-            canvas.sortingOrder = 0;
+            canvas.sortingOrder = -1;
         }
     }
 
@@ -117,6 +126,19 @@ public class UIManager
         popup = null;
 
         _order--;
+    }
+
+    public GameObject getPopStackTop()
+    {
+        if (_popupStack.Count > 0)
+        {
+            return _popupStack.Peek().gameObject;
+        }
+        else
+        {
+            // 스택이 비어있을 때의 처리 코드 추가
+            return null; // 이 함수를 사용할 때 null연산자를 이용해 넘어가게 하기 위함
+        }
     }
 
     public void CloseAllPopupUI()

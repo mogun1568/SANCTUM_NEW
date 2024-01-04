@@ -1,77 +1,50 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
-public class PauseMenu : MonoBehaviour
+public class PauseMenu : UI_Popup
 {
-    public GameObject ui;
+    //string MainToLoad = "MainMenu";
 
-    public string MainToLoad = "MainMenu";
-
-    public SceneFader sceneFader;
-
-    public GameObject settingUI;
-
-    // Time.timescale = 0이면 Update문 실행안됨
-    void Update()
+    enum Buttons
     {
-        //if (!GameManager.instance.isLive)
-        //{
-        //    return;
-        //}
-
-        if (SceneFader.isFading)
-        {
-            return;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P))
-        {
-            Toggle();
-        }
+        Button_Setting,
+        Button_Continue,
+        Button_Retry,
+        Button_GoToMenu
     }
 
-    public void Toggle()
+    void Awake()
     {
-        Managers.Sound.Play("Effects/UiClickLow", Define.Sound.Effect);
-        //GameManager.instance.soundManager.Play("Effects/UiClickLow", SoundManager.Sound.Effect);
+        base.Init();
 
-        if (settingUI.activeSelf)
-        {
-            settingUI.SetActive(false);
-            return;
-        }
+        Bind<Button>(typeof(Buttons));
 
-        ui.SetActive(!ui.activeSelf);
-
-        if (ui.activeSelf)
-        {
-            GameManager.instance.Stop();
-        }
-        else
-        {
-            GameManager.instance.Resume();
-            //GameManager.instance.soundManager.Play("Effects/UiClickLow", SoundManager.Sound.Effect);
-        }
+        BindEvent(GetButton((int)Buttons.Button_Setting).gameObject, (PointerEventData data) => { Setting(); }, Define.UIEvent.Click);
+        BindEvent(GetButton((int)Buttons.Button_Continue).gameObject, (PointerEventData data) => { Managers.Game.Toggle(); }, Define.UIEvent.Click);
+        BindEvent(GetButton((int)Buttons.Button_Retry).gameObject, (PointerEventData data) => { Retry(); }, Define.UIEvent.Click);
+        BindEvent(GetButton((int)Buttons.Button_GoToMenu).gameObject, (PointerEventData data) => { Menu(); }, Define.UIEvent.Click);
     }
 
     public void Retry()
     {
-        Toggle();
-        sceneFader.FadeTo(SceneManager.GetActiveScene().name);
+        Managers.Game.Toggle();
+        Managers.Scene.sceneFader.FadeTo(Define.Scene.GamePlay);
     }
 
     public void Menu()
     {
-        Toggle();
-        sceneFader.FadeTo(MainToLoad);
+        Managers.Game.Toggle();
+        Managers.Scene.sceneFader.FadeTo(Define.Scene.MainMenu);
     }
 
     public void Setting()
     {
         Managers.Sound.Play("Effects/UiClickLow", Define.Sound.Effect);
-        //GameManager.instance.soundManager.Play("Effects/UiClickLow", SoundManager.Sound.Effect);
-        settingUI.SetActive(true);
+        Managers.UI.ShowPopupUI<Setting>("SettingUI");
     }
 }

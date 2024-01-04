@@ -11,18 +11,22 @@ public class SceneFader : MonoBehaviour
 
     public Setting setting;
 
-    public static bool isFading;
+    public bool isFading;
 
-    void Start()
+    public void Init()
     {
-        setting.IntialSetting();
+        //img = GetComponentInChildren<Image>();
+        img = Util.FindChild<Image>(gameObject, "Black", true);
+
+        StopAllCoroutines();
+        //setting.IntialSetting();
         StartCoroutine(FadeIn());
     }
 
-    public void FadeTo(string scene)
+    public void FadeTo(Define.Scene type)
     {
         isFading = true;
-        StartCoroutine(FadeOut(scene));
+        StartCoroutine(FadeOut(type));
     }
 
     IEnumerator FadeIn()
@@ -36,9 +40,11 @@ public class SceneFader : MonoBehaviour
             img.color = new Color(0f, 0f, 0f, a);
             yield return 0;
         }
+
+        isFading = false;
     }
 
-    IEnumerator FadeOut(string scene)
+    IEnumerator FadeOut(Define.Scene type)
     {
         float t = 0f;
 
@@ -51,8 +57,8 @@ public class SceneFader : MonoBehaviour
         }
 
         //GameManager.instance.soundManager.Clear();
-        setting.ChangeScene();
-        SceneManager.LoadScene(scene);
+        //setting.ChangeScene();
         Cursor.lockState = CursorLockMode.None;
+        Managers.Scene.LoadScene(type); 
     }
 }
