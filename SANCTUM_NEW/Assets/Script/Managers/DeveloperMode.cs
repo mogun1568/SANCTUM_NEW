@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DeveloperMode : MonoBehaviour
 {
-    [SerializeField] Map map;
+    [SerializeField] NewMap map;
 
     void Start()
     {
@@ -43,7 +43,7 @@ public class DeveloperMode : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.D))
         {
             Debug.Log("d");
-            map.expand_map();
+            map.ExpendMap();
         }
 
         // 라이프 조절

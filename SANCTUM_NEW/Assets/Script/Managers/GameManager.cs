@@ -44,7 +44,7 @@ public class GameManager
         nextExp = 3;
         countLevelUp = 0;
 
-        Debug.Log(nextExp);
+        //Debug.Log(nextExp);
     }
 
     /*void Awake()

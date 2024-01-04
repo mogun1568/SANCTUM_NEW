@@ -17,7 +17,7 @@ using UnityEngine;
 */
 
 
-public class Map : MonoBehaviour
+public class AMap : MonoBehaviour
 {
     [SerializeField] static int MAX_MAP_SIZE = 128; //무조건 짝수, 최소 6
     [SerializeField] double weighted_num = 0; //가중치 0~1 실수
@@ -2176,18 +2176,18 @@ public class Map : MonoBehaviour
     public static LinkedList<Vector3> points;
     public Vector3 temp_struct_speed;
 
-    void Awake()
-    {
-        points = new LinkedList<Vector3>();
-        Map_start();
-        reset_dfs_arr(0);
-        fill_map_node(start_point[0], start_point[1]);
-        for (int i = (MAX_MAP_SIZE - current_map_size) / 2; i < (MAX_MAP_SIZE - current_map_size) / 2 + current_map_size; i++)
-            for (int j = (MAX_MAP_SIZE - current_map_size) / 2; j < (MAX_MAP_SIZE - current_map_size) / 2 + current_map_size; j++)
-            {
-                map_block_generate(j, i);
-            }
-        for (int i = 0; i < 5; i++)
-            expand_map();
-    }
+    //void Awake()
+    //{
+    //    points = new LinkedList<Vector3>();
+    //    Map_start();
+    //    reset_dfs_arr(0);
+    //    fill_map_node(start_point[0], start_point[1]);
+    //    for (int i = (MAX_MAP_SIZE - current_map_size) / 2; i < (MAX_MAP_SIZE - current_map_size) / 2 + current_map_size; i++)
+    //        for (int j = (MAX_MAP_SIZE - current_map_size) / 2; j < (MAX_MAP_SIZE - current_map_size) / 2 + current_map_size; j++)
+    //        {
+    //            map_block_generate(j, i);
+    //        }
+    //    for (int i = 0; i < 5; i++)
+    //        expand_map();
+    //}
 }

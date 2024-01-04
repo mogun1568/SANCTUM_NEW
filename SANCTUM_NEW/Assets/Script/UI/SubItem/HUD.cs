@@ -6,7 +6,7 @@ using TMPro;
 
 public class HUD : MonoBehaviour
 {
-    public enum InfoType { Time, Live, Exp }
+    public enum InfoType { Time, Live, Exp, Round }
     public InfoType type;
 
     Slider mySlider;
@@ -41,6 +41,10 @@ public class HUD : MonoBehaviour
                 float curExp = Managers.Game.exp;
                 float maxExp = Managers.Game.nextExp;
                 mySlider.value = curExp / maxExp;
+                break;
+            case InfoType.Round:
+                int RoundCount = Managers.Game.Rounds;
+                myText.text = RoundCount.ToString();
                 break;
 
         }

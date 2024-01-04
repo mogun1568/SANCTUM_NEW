@@ -82,7 +82,7 @@ public class DragItem : UI_Base
 
         //Move
         Physics.Raycast(ray, out hit);
-        if (hit.transform.name == "ForestGround01(Clone)")
+        if (hit.transform.name == "ForestGround01")
         {
             if (itemData.itemType == "Tower")
             {
@@ -129,7 +129,7 @@ public class DragItem : UI_Base
     {
         transform.position = normal_position;
         transform.localScale = normal_size;
-        if (hit.transform.name == "ForestGround01(Clone)")
+        if (hit.transform.name == "ForestGround01")
         {
             if ((hit.transform.GetComponent<Node>().turret != null || !hit.transform.GetComponent<Node>().turret))
             {

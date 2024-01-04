@@ -44,7 +44,7 @@ public class CameraController : MonoBehaviour
             if (Input.GetMouseButton(1))
             {
                 pos = Camera.main.ScreenToViewportPoint(dragOrigin - Input.mousePosition);
-                move = Quaternion.Euler(45f, 45f, 0f) * new Vector3(pos.x * moveSpeed, 0, pos.y * moveSpeed);
+                move = Quaternion.Euler(60f, 45f, 0f) * new Vector3(pos.x * moveSpeed, 0, pos.y * moveSpeed);
 
                 // 카메라의 y 위치를 고정시키기 위해 yPosition 변수를 사용합니다.
                 move.y = 0;

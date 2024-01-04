@@ -12,7 +12,7 @@ public class WaveSpawner : MonoBehaviour
     //public Wave[] waves;
     int waveCount = 5;
 
-    public Transform spawnPoint;    // 스폰할 위치
+    //public Transform spawnPoint;    // 스폰할 위치
 
     public float timeBetweenWaves = 20f;
     private float countdown = 4f;
@@ -24,7 +24,7 @@ public class WaveSpawner : MonoBehaviour
 
     //private int waveIndex = 0;
 
-    [SerializeField] Map otherScriptInstance;
+    [SerializeField] NewMap map;
 
     //int monsterType;
 
@@ -41,6 +41,8 @@ public class WaveSpawner : MonoBehaviour
         //Managers.Scene.sceneFader.isFading = false;
         Managers.Sound.Play("Bgms/old-story-from-scotland-147143", Define.Sound.Bgm);
         monsters = Resources.LoadAll<GameObject>("Prefabs/Monster");
+
+
     }
 
     void Update()
@@ -69,7 +71,7 @@ public class WaveSpawner : MonoBehaviour
                 EnemyStat.AddHp += 20;
                 waveCount = Mathf.RoundToInt(waveCount * 1.1f);
                 Mathf.Clamp(waveCount, 0, 10);
-                otherScriptInstance.expand_map();
+                map.ExpendMap();
             }
             expandCount++;
             
@@ -148,7 +150,7 @@ public class WaveSpawner : MonoBehaviour
             idx = Random.Range(0, monsters.Length);
         }
         Debug.Log(monsters[Random.Range(0, monsters.Length)].name);
-        GameObject monster = Managers.Resource.Instantiate($"Monster/{monsters[idx].name}", spawnPoint.position, spawnPoint.rotation);
+        GameObject monster = Managers.Resource.Instantiate($"Monster/{monsters[idx].name}", map.startObj.transform.position, map.startObj.transform.rotation);
         //EnemiesAlive++;
     }
 
@@ -156,7 +158,7 @@ public class WaveSpawner : MonoBehaviour
     {
         Debug.Log("spawnBoss");
         Managers.Sound.Play("Bgms/battle-of-the-dragons-8037", Define.Sound.Bgm);
-        GameObject monster = Managers.Resource.Instantiate("Monster/SalarymanDefault", spawnPoint.position, spawnPoint.rotation);
+        GameObject monster = Managers.Resource.Instantiate("Monster/SalarymanDefault", map.startObj.transform.position, map.startObj.transform.rotation);
     }
 }
 

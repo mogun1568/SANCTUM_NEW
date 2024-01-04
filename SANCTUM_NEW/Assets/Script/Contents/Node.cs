@@ -14,7 +14,7 @@ public class Node : MonoBehaviour
 
     BuildManager buildManager;
 
-    public bool enviroment;
+    [HideInInspector] public bool enviroment;
 
     void OnMouseDown()
     {
